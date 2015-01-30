@@ -1,0 +1,38 @@
+{
+  "name": "tuxharness",
+  "version": "0.1.0",
+  "description": "Test User eXperience Harness",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "keywords": [
+    "test",
+    "ui",
+    "ux",
+    "harness",
+    "fragment",
+    "node",
+    "js",
+    "css",
+    "html",
+    "template",
+    "testable"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danactive/tuxharness"
+  },
+  "author": "Dan BROOKS",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.11.x",
+    "express-dustjs": "1.0.x"
+  },
+  "peerDependencies": {
+    "express": ">=4.x.x"
+  },
+  "engines": {
+    "node": ">=0.10.22"
+  }
+}
