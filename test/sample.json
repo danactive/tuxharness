@@ -32,6 +32,7 @@
         {
             "route": "helloJade",
             "data": {
+                "title": "Jade title",
                 "message": "Jade view engine"
             },
             "view": {
