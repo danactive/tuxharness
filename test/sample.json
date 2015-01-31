@@ -1,0 +1,60 @@
+{
+    "register": {
+        "view": {
+            "dust": {
+                "path": "test/views/dust"
+            },
+            "jade": {
+                "path": "test/views/jade"
+            }
+        }
+    },
+    "harnesses": [
+        {
+            "route": "html",
+            "view": {
+                "path": "html.dust"
+            }
+        },
+        {
+            "route": "helloDust",
+            "data": {
+                "address": {
+                    "street": "123 Main St",
+                    "city": "Vancouver"
+                }
+            },
+            "view": {
+                "engine": "dust",
+                "path": "hello.dust"
+            }
+        },
+        {
+            "route": "helloJade",
+            "data": {
+                "message": "Jade view engine"
+            },
+            "view": {
+                "engine": "jade",
+                "path": "hello.jade"
+            }
+        },
+        {
+            "route": "helloWithStatic",
+            "data": {
+                "address": {
+                    "street": "123 Main St",
+                    "city": "Vancouver"
+                }
+            },
+            "static": {
+                "css": ["/static/css/move.pages-8.1.0.css"],
+                "js": ["https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"]
+            },
+            "view": {
+                "engine": "dust",
+                "path": "hello.dust"
+            }
+        }
+    ]
+}
