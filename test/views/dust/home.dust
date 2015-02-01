@@ -1,0 +1,19 @@
+<html>
+<head>
+	<title>tuxharness JSON structure</title>
+</head>
+<body>
+	<h2>Your Routes</h2>
+	{#harnesses}
+		<ul>
+			<li>Route <a href="{route}">{route}</a></li>
+			<li>View {view.path}</li>
+			<li>Data {data|s|js}</li>
+		</ul>
+	{/harnesses}
+	<h2>tux Routes</h2>
+	<ul>
+		<li><a href="tux_static">tux_static</a></li>
+	</ul>
+</body>
+</html>
