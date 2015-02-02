@@ -1,5 +1,9 @@
 {
     "register": {
+        "static": {
+            "route": "static",
+            "directory": "test"
+        },
         "view": {
             "dust": {
                 "path": "test/views/dust"

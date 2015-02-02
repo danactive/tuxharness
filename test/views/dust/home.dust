@@ -11,9 +11,11 @@
 			<li>Data {data|s|js}</li>
 		</ul>
 	{/harnesses}
-	<h2>tux Routes</h2>
-	<ul>
-		<li><a href="tux_static">tux_static</a></li>
-	</ul>
+	{?register.static}
+		<h2>Static Route</h2>
+		<ul>
+			<li><a href="{register.static.route}">{register.static.route}</a> points to {register.static.directory}</li>
+		</ul>
+	{/register.static}
 </body>
 </html>
