@@ -1,21 +1,23 @@
 <html>
 <head>
-	<title>tuxharness JSON structure</title>
+    <title>tuxharness JSON structure</title>
 </head>
 <body>
-	<h2>Your Routes</h2>
-	{#harnesses}
-		<ul>
-			<li>Route <a href="{route}">{route}</a></li>
-			<li>View {view.path}</li>
-			<li>Data {data|s|js}</li>
-		</ul>
-	{/harnesses}
-	{?register.static}
-		<h2>Static Route</h2>
-		<ul>
-			<li><a href="{register.static.route}">{register.static.route}</a> points to {register.static.directory}</li>
-		</ul>
-	{/register.static}
+    <h2>Your Routes</h2>
+    {#harnesses}
+        <ul>
+            <li>Route <a href="{route}">{route}</a></li>
+            <li>View {view.path}</li>
+            <li>Data {data|s|js}</li>
+        </ul>
+    {/harnesses}
+    {?register.static}
+        <h2>Static Route</h2>
+        <ul>
+            {#register.static.route}
+                <li><a href="{.}">{.}</a> points to {register.static.directory}</li>
+            {/register.static.route}
+        </ul>
+    {/register.static}
 </body>
 </html>
