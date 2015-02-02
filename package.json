@@ -27,11 +27,12 @@
   "author": "Dan BROOKS",
   "license": "MIT",
   "dependencies": {
+    "app-root-path": "1.0.x",
+    "consolidate": "0.10.x",
     "express": "4.11.x",
     "serve-index": "1.6.x"
   },
   "devDependencies": {
-    "consolidate": "0.10.x",
     "dustjs-linkedin": "2.5.x",
     "jade": "1.9.x"
   },
