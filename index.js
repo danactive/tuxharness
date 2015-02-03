@@ -3,6 +3,7 @@
     'use strict';
     var app,
         appRoot,
+        directory,
         express = require('express'),
         fs,
         path = require("path"),
@@ -11,6 +12,7 @@
         server,
         serverPort,
         listDirectory = require('serve-index'),
+        routes = [],
         staticPath,
         template = require('consolidate'),
         viewPaths = [];
@@ -35,6 +37,7 @@
         staticPath = path.join(appRoot.path, recipe.register.static.directory);
         app.use(express.static(staticPath)); // read file content /tux_static/js/sample.js
         if (recipe.register.static.route === "/") {
+            directory = recipe.register.static.directory;
             fs = require('fs');
 
             fs.exists(staticPath, function (exists) {
@@ -45,18 +48,19 @@
                     if (err || filenames === undefined || filenames.length === 0) {
                         throw new ReferenceError("Static path cannot be read: " + staticPath);
                     }
-                    recipe.register.static.route = [];
                     filenames.forEach(function (filename) {
-                        recipe.register.static.route.push(filename);
-                        app.use('/' + filename, listDirectory(path.join(appRoot.path, recipe.register.static.directory, filename), {'icons': true})); // serve directory listing
+                        routes.push(filename);
+                        app.use('/' + filename, listDirectory(path.join(appRoot.path, directory, filename), {'icons': true})); // serve directory listing
                     });
                 });
             });
         } else {
-            recipe.register.static.directory += "/" + recipe.register.static.route;
-            recipe.register.static.route = [recipe.register.static.route];
-            app.use('/' + recipe.register.static.route, listDirectory(path.join(appRoot.path, recipe.register.static.directory), {'icons': true})); // serve directory listing
+            directory = path.join(recipe.register.static.directory, "/", recipe.register.static.route);
+            routes = [recipe.register.static.route];
+            app.use('/' + recipe.register.static.route, listDirectory(path.join(appRoot.path, directory), {'icons': true})); // serve directory listing
         }
+        recipe.register.static.directory = directory;
+        recipe.register.static.route = routes;
     }
 
     // home route
