@@ -4,6 +4,7 @@
 Every project needs a tuxharness JavaScript config like this [sample.js](test/sample.js)
 
 ### Register
+* `port` localhost server port number (default is *3000*)
 * `static` serve static assets (img, js, css, fonts...)
 	* `route` is a virtual web path
 	* `directory` is the physical path where the static assets are hosted

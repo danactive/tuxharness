@@ -9,7 +9,7 @@
         recipe,
         recipeFilename = process && process.argv && process.argv.length >=3 && process.argv[2],
         server,
-        serverPort = 3000,
+        serverPort,
         listDirectory = require('serve-index'),
         staticPath,
         template = require('consolidate'),
@@ -19,6 +19,7 @@
         throw new ReferenceError("Missing recipe filename or incorrect path");
     }
     recipe = require(recipeFilename);
+    serverPort = recipe.register.port || 3000;
 
     // register view engines based on recipe
     Object.keys(recipe.register.view).forEach(function (key) {

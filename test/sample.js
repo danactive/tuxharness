@@ -1,5 +1,6 @@
 module.exports = {
     "register": {
+        "port": 8080,
         "static": {
             "route": "static",
             "directory": "test"
