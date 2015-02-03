@@ -1,2 +1,2 @@
-<h1>{response.about}</h1>
-<img src="{response.cover.source}">
+<h1>{about}</h1>
+<img src="{cover.source}">

@@ -60,7 +60,13 @@
 
     // home route
     app.get('/', function (req, res) {
-        res.render(path.join(__dirname, "test/views/dust/home.dust"), recipe);
+        var out = JSON.parse(JSON.stringify(recipe));
+        out.harnesses.forEach(function (harness) {
+            if (typeof harness.data === "function") {
+                harness.data = "Service call function";
+            }
+        });
+        res.render(path.join(__dirname, "test/views/dust/home.dust"), out);
     });
 
     // define routes based on recipe
@@ -68,6 +74,15 @@
         app.get('/' + harness.route, function (req, res) {
             if (harness.data === undefined) {
                 res.render(harness.view.path);
+            } else if (typeof harness.data === "string") {
+                var request = require('request');
+                request(harness.data, {"json": true}, function (error, response, body) {
+                    if (error || response.statusCode !== 200) {
+                        throw new ReferenceError("Service call failed with code " + response.statusCode + " due to error:" + error);
+                    } else {
+                        res.render(harness.view.path, body);
+                    }
+                });
             } else if (typeof harness.data === "function") {
                 harness.data(function (out) {
                     res.render(harness.view.path, out);

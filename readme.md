@@ -25,3 +25,5 @@
 
 ## Roadmap
 1. Lint
+1. Auto respawn on view save
+1. Unit test
