@@ -1,4 +1,5 @@
 # Test User eXperience Harness
+Build a test harness with dynamic data to quickly prototype and isolate your HTML/CSS.
 
 ## Config structure as JavaScript
 Every project needs a tuxharness JavaScript config like this [sample.js](test/sample.js)
@@ -27,6 +28,10 @@ Every project needs a tuxharness JavaScript config like this [sample.js](test/sa
 	1. install any additional engines in your project
 	1. register your view engine in your project's JS file
 
+## Commands
+* `npm run harness` Single run server to serve the test harness environment
+* `npm run dev` Respawn-on-save server to serve the test harness environment
+* `npm run lint` Lint JS files
+
 ## Roadmap
-1. Auto respawn on view save
 1. Unit test

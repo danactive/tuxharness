@@ -1,12 +1,12 @@
 {
   "name": "tuxharness",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "Test User eXperience Harness",
   "main": "index.js",
   "scripts": {
-    "harness": "node . ./test/sample.js",
-    "lint": "./node_modules/.bin/gulp lint",
-    "test": "mocha test"
+    "harness": "node .",
+    "dev": "./node_modules/.bin/gulp develop",
+    "lint": "./node_modules/.bin/gulp lint"
   },
   "keywords": [
     "test",
@@ -37,11 +37,15 @@
   "devDependencies": {
     "dustjs-linkedin": "2.5.x",
     "gulp": "3.8.x",
+    "gulp-develop-server": "0.2.x",
     "gulp-expect-file": "0.0.x",
     "gulp-jshint": "1.9.x",
-    "jade": "1.9.x"
+    "gulp-load-plugins": "0.8.x",
+    "jade": "1.9.x",
+    "jshint-stylish": "1.0.x"
   },
   "engines": {
     "node": ">=0.10.22"
-  }
+  },
+  "tuxharness": "./test/sample.js"
 }

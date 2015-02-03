@@ -1,4 +1,4 @@
-/*global process, require*/
+/*global require*/
 (function () {
     'use strict';
     var app,
@@ -7,8 +7,9 @@
         express = require('express'),
         fs,
         path = require("path"),
+        pkg = require('./package.json'),
         recipe,
-        recipeFilename = process && process.argv && process.argv.length >=3 && process.argv[2],
+        recipeFilename,
         server,
         serverPort,
         listDirectory = require('serve-index'),
@@ -17,8 +18,9 @@
         template = require('consolidate'),
         viewPaths = [];
     app = express();
+    recipeFilename = pkg.tuxharness;
     if (recipeFilename === undefined) {
-        throw new ReferenceError("Missing recipe filename or incorrect path");
+        throw new ReferenceError("Missing recipe filename or incorrect path. Definition must be package.json tuxharness key.");
     }
     recipe = require(recipeFilename);
     serverPort = recipe.register.port || 3000;
