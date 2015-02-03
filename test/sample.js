@@ -1,4 +1,4 @@
-{
+module.exports = {
     "register": {
         "static": {
             "route": "static",
@@ -41,6 +41,20 @@
             "view": {
                 "path": "hello.jade"
             }
+        },
+        {
+            "route": "facebook",
+            "data": function (cb) {
+                var request = require('request');
+                request('http://graph.facebook.com/github', function (error, response, body) {
+                  if (!error && response.statusCode == 200) {
+                    cb({"body": body}); // Show the HTML for the Google homepage. 
+                  }
+                });
+            },
+            "view": {
+                "path": "api.dust"
+            }
         }
     ]
-}
+};

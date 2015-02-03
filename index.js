@@ -66,7 +66,13 @@
     // define routes based on recipe
     recipe.harnesses.forEach(function (harness) {
         app.get('/' + harness.route, function (req, res) {
-            res.render(harness.view.path, harness.data);
+            if (typeof harness.data === "function") {
+                harness.data(function (out) {
+                    res.render(harness.view.path, out);
+                });
+            } else if (typeof harness.data === "object") {
+                res.render(harness.view.path, harness.data);
+            }
         });
     });
 
