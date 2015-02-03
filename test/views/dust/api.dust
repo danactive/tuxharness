@@ -1,2 +1,2 @@
-Hello
-{body|s}
+<h1>{response.about}</h1>
+<img src="{response.cover.source}">

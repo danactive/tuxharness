@@ -46,10 +46,10 @@ module.exports = {
             "route": "facebook",
             "data": function (cb) {
                 var request = require('request');
-                request('http://graph.facebook.com/github', function (error, response, body) {
-                  if (!error && response.statusCode == 200) {
-                    cb({"body": body}); // Show the HTML for the Google homepage. 
-                  }
+                request('http://graph.facebook.com/github', {"json": true}, function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        cb({"response": body}); // return JSON to view after async call via callback
+                    }
                 });
             },
             "view": {
