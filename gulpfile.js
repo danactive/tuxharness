@@ -48,7 +48,7 @@ gulp.task('develop', ["lint"], function() {
 		});
 	});
 
-	gulp.watch(getViewFolders(), function () {
+	return gulp.watch(getViewFolders(), function () {
 		plugins.developServer.restart();
 	});
 });

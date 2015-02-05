@@ -2,12 +2,12 @@
 (function () {
     'use strict';
     var app,
-        appRoot,
+        appRoot = require('app-root-path'),
         directory,
         express = require('express'),
         fs,
         path = require("path"),
-        pkg = require('./package.json'),
+        pkg,
         recipe,
         recipeFilename,
         server,
@@ -18,11 +18,12 @@
         template = require('consolidate'),
         viewPaths = [];
     app = express();
+    pkg = require(path.join(appRoot.path, 'package.json'));
     recipeFilename = pkg.tuxharness;
     if (recipeFilename === undefined) {
         throw new ReferenceError("Missing recipe filename or incorrect path. Definition must be package.json tuxharness key.");
     }
-    recipe = require(recipeFilename);
+    recipe = require(path.join(appRoot.path, recipeFilename));
     serverPort = recipe.register.port || 3000;
 
     // register view engines based on recipe
@@ -35,7 +36,6 @@
 
     // static assets
     if (recipe.register.static) {
-        appRoot = require('app-root-path');
         staticPath = path.join(appRoot.path, recipe.register.static.directory);
         app.use(express.static(staticPath)); // read file content /tux_static/js/sample.js
         if (recipe.register.static.route === "/") {
