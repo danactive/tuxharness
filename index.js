@@ -37,7 +37,7 @@
     // static assets
     if (recipe.register.static) {
         staticPath = path.join(appRoot.path, recipe.register.static.directory);
-        app.use(express.static(staticPath)); // read file content /tux_static/js/sample.js
+        app.use(express.static(staticPath));
         if (recipe.register.static.route === "/") {
             directory = recipe.register.static.directory;
             fs = require('fs');
@@ -78,6 +78,9 @@
 
     // define routes based on recipe
     recipe.harnesses.forEach(function (harness) {
+        if (harness.route === undefined) {
+            throw new ReferenceError("Route is missing and required.");
+        }
         app.get('/' + harness.route, function (req, res) {
             if (harness.data === undefined) {
                 res.render(harness.view.path);
@@ -96,6 +99,8 @@
                 });
             } else if (typeof harness.data === "object") {
                 res.render(harness.view.path, harness.data);
+            } else {
+                throw new ReferenceError("Template data is an odd format");
             }
         });
     });
