@@ -24,7 +24,7 @@
         throw new ReferenceError("Missing recipe filename or incorrect path. Definition must be package.json tuxharness key.");
     }
     recipe = require(path.join(appRoot.path, recipeFilename));
-    serverPort = recipe.register.port || 3000;
+    serverPort = recipe.register.port || 4000;
 
     // register view engines based on recipe
     Object.keys(recipe.register.view).forEach(function (key) {
@@ -47,7 +47,8 @@
                     throw new ReferenceError("Static path cannot be found: " + staticPath);
                 }
                 fs.readdir(staticPath, function (err, filenames) {
-                    if (err || filenames === undefined || filenames.length === 0) {
+                    var hasError = (err || filenames === undefined || filenames.length === 0);
+                    if (hasError) {
                         throw new ReferenceError("Static path cannot be read: " + staticPath);
                     }
                     filenames.forEach(function (filename) {
@@ -67,10 +68,12 @@
 
     // home route
     app.get('/', function (req, res) {
-        var out = JSON.parse(JSON.stringify(recipe));
+        var out = JSON.parse(JSON.stringify(recipe)); // clone
         out.harnesses.forEach(function (harness) {
             if (typeof harness.data === "function") {
                 harness.data = "Service call function";
+            } else if (harness.data === undefined) {
+                harness.data = "N/A";
             }
         });
         res.render(path.join(__dirname, "test/views/dust/home.dust"), out);
@@ -109,6 +112,7 @@
     server = app.listen(serverPort, function () {
         var host = server.address().address,
             port = server.address().port;
+        host = (host === "0.0.0.0") ? "localhost" : host;
 
         console.log('tuxharness app running at http://%s:%s', host, port);
     });

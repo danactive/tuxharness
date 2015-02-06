@@ -1,12 +1,14 @@
 {
   "name": "tuxharness",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Test User eXperience Harness",
   "main": "index.js",
   "scripts": {
     "harness": "node .",
     "dev": "./node_modules/.bin/gulp develop",
-    "lint": "./node_modules/.bin/gulp lint"
+    "lint": "./node_modules/.bin/gulp lint",
+    "start": "npm run dev",
+    "test": "npm run lint"
   },
   "keywords": [
     "test",
@@ -19,7 +21,11 @@
     "css",
     "html",
     "template",
-    "testable"
+    "testable",
+    "prototype",
+    "isolate",
+    "view",
+    "engines"
   ],
   "repository": {
     "type": "git",
