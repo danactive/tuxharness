@@ -65,6 +65,17 @@ module.exports = {
             "view": {
                 "path": "api.dust"
             }
+        },
+        {
+            "route": "largeJson",
+            "data": require(__dirname + "/data/canadian-sales-tax.json"),
+            "view": {
+                "path": "salesTax.jade"
+            }
+        },
+        {
+            "route": "rawLargeJson",
+            "data": require(__dirname + "/data/canadian-sales-tax.json")
         }
     ]
 };

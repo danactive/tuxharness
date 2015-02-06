@@ -3,20 +3,17 @@
     'use strict';
     var app,
         appRoot = require('app-root-path'),
-        directory,
         express = require('express'),
-        fs,
         path = require("path"),
         pkg,
         recipe,
         recipeFilename,
+        setHomeRoute,
+        setPageRoute,
+        setStaticRoute,
+        setViewEngine,
         server,
-        serverPort,
-        listDirectory = require('serve-index'),
-        routes = [],
-        staticPath,
-        template = require('consolidate'),
-        viewPaths = [];
+        serverPort;
     app = express();
     pkg = require(path.join(appRoot.path, 'package.json'));
     recipeFilename = pkg.tuxharness;
@@ -26,20 +23,52 @@
     recipe = require(path.join(appRoot.path, recipeFilename));
     serverPort = recipe.register.port || 4000;
 
-    // register view engines based on recipe
-    Object.keys(recipe.register.view).forEach(function (key) {
-        app.engine(key, template[key]);
-        app.set('view engine', key);
-        viewPaths.push(recipe.register.view[key].path);
-    });
-    app.set('views', viewPaths);
+    setViewEngine = function (viewRule) {
+        var template = require('consolidate'),
+            viewPaths = [];
+        // register view engines based on recipe to express
+        Object.keys(viewRule).forEach(function (key) {
+            app.engine(key, template[key]);
+            app.set('view engine', key);
+            viewPaths.push(viewRule[key].path);
+        });
+        app.set('views', viewPaths);
+    };
+    setHomeRoute = function (out) {
+        var dataLength = 300;
+        out.harnesses.forEach(function (harness) {
+            var datum;
+            if (typeof harness.data === "function") {
+                datum = "Service call function";
+            } else if (typeof harness.data === "object") {
+                datum = JSON.stringify(harness.data);
+                datum = (datum.length > dataLength) ? datum.substring(0,dataLength) + "..." : datum;
+            } else if (harness.data === undefined) {
+                datum = "N/A";
+            } else {
+                datum = harness.data;
+            }
+            harness.datum = datum;
 
-    // static assets
-    if (recipe.register.static) {
-        staticPath = path.join(appRoot.path, recipe.register.static.directory);
-        app.use(express.static(staticPath));
-        if (recipe.register.static.route === "/") {
-            directory = recipe.register.static.directory;
+            if (harness.view === undefined) {
+                harness.view = {};
+                harness.view.path = "N/A";
+            }
+        });
+        // express
+        app.get('/', function (req, res) {
+            res.render(path.join(__dirname, "test/views/dust/home.dust"), out);
+        });
+    };
+    setStaticRoute = function (staticRule) {
+        var directory = staticRule.directory,
+            fs,
+            listDirectory = require('serve-index'),
+            routeNames = [],
+            routePaths = [],
+            staticPath;
+        staticPath = path.join(appRoot.path, directory);
+        if (staticRule.route === "/") {
             fs = require('fs');
 
             fs.exists(staticPath, function (exists) {
@@ -52,61 +81,78 @@
                         throw new ReferenceError("Static path cannot be read: " + staticPath);
                     }
                     filenames.forEach(function (filename) {
-                        routes.push(filename);
-                        app.use('/' + filename, listDirectory(path.join(appRoot.path, directory, filename), {'icons': true})); // serve directory listing
+                        routeNames.push(filename);
+                        routePaths.push(path.join(appRoot.path, directory, filename));
                     });
                 });
             });
         } else {
-            directory = path.join(recipe.register.static.directory, "/", recipe.register.static.route);
-            routes = [recipe.register.static.route];
-            app.use('/' + recipe.register.static.route, listDirectory(path.join(appRoot.path, directory), {'icons': true})); // serve directory listing
+            directory = path.join(staticRule.directory, "/", staticRule.route);
+            routeNames = [staticRule.route];
+            routePaths = [path.join(appRoot.path, directory)];
         }
         recipe.register.static.directory = directory;
-        recipe.register.static.route = routes;
-    }
-
-    // home route
-    app.get('/', function (req, res) {
-        var out = JSON.parse(JSON.stringify(recipe)); // clone
-        out.harnesses.forEach(function (harness) {
-            if (typeof harness.data === "function") {
-                harness.data = "Service call function";
-            } else if (harness.data === undefined) {
-                harness.data = "N/A";
-            }
-        });
-        res.render(path.join(__dirname, "test/views/dust/home.dust"), out);
-    });
-
-    // define routes based on recipe
-    recipe.harnesses.forEach(function (harness) {
-        if (harness.route === undefined) {
-            throw new ReferenceError("Route is missing and required.");
+        recipe.register.static.route = routeNames;
+        // express
+        app.use(express.static(staticPath));
+        for (var i = 0, len = routeNames.length; i < len; i++) {
+            app.use('/' + routeNames[i], listDirectory(routePaths[i], {'icons': true})); // serve directory listing
         }
-        app.get('/' + harness.route, function (req, res) {
+    };
+    setPageRoute = function (harnessRule) {
+        var request = require('request'),
+            setRoute = function (arg) {
+                // express
+                app.get('/' + arg.route, function (req, res) {
+                    res.render(arg.view, arg.data);
+                });
+            };
+        harnessRule.forEach(function (harness) {
+            var out = {
+                    data: {},
+                    route: harness.route,
+                    view: ""
+                };
+            if (out.route === undefined) {
+                throw new ReferenceError("Route is missing and required.");
+            }
             if (harness.data === undefined) {
-                res.render(harness.view.path);
+                out.view = harness.view && harness.view.path;
+                setRoute(out);
             } else if (typeof harness.data === "string") {
-                var request = require('request');
                 request(harness.data, {"json": true}, function (error, response, body) {
                     if (error || response.statusCode !== 200) {
-                        throw new ReferenceError("Service call failed with code " + response.statusCode + " due to error:" + error);
+                        throw new ReferenceError("Service call failed with HTTP status code " + response.statusCode + " due to error:" + error);
                     } else {
-                        res.render(harness.view.path, body);
+                        out.view = harness.view && harness.view.path;
+                        out.data = body;
+                        setRoute(out);
                     }
                 });
             } else if (typeof harness.data === "function") {
-                harness.data(function (out) {
-                    res.render(harness.view.path, out);
+                harness.data(function (result) {
+                    out.view = harness.view && harness.view.path;
+                    out.data = result;
+                    setRoute(out);
                 });
             } else if (typeof harness.data === "object") {
-                res.render(harness.view.path, harness.data);
+                out.view = harness.view && harness.view.path;
+                out.data = harness.data;
+                setRoute(out);
             } else {
-                throw new ReferenceError("Template data is an odd format");
+                throw new ReferenceError("View template data is an odd format");
             }
         });
-    });
+    };
+
+    if (recipe.register && recipe.register.view) {
+        setViewEngine(recipe.register.view);
+    }
+    if (recipe.register && recipe.register.static) {
+        setStaticRoute(recipe.register.static);
+    }
+    setHomeRoute(recipe);
+    setPageRoute(recipe.harnesses);
 
     // start server
     server = app.listen(serverPort, function () {
