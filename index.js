@@ -4,11 +4,13 @@
     var app,
         appRoot = require('app-root-path'),
         express = require('express'),
+        getJsonViaString,
         path = require("path"),
         pkg,
         recipe,
         recipeFilename,
         setHomeRoute,
+        setJsonRoute,
         setPageRoute,
         setStaticRoute,
         setViewEngine,
@@ -22,6 +24,17 @@
     }
     recipe = require(path.join(appRoot.path, recipeFilename));
     serverPort = recipe.register.port || 4000;
+
+    getJsonViaString = function (url, cb) {
+        var httpRequest = require('request');
+        httpRequest(url, {"json": true}, function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                cb(new ReferenceError("Service call failed with HTTP status code " + response.statusCode + " due to error:" + error));
+            } else {
+                cb(null, body);
+            }
+        });
+    };
 
     setViewEngine = function (viewRule) {
         var template = require('consolidate'),
@@ -45,6 +58,7 @@
                 datum = (datum.length > dataLength) ? datum.substring(0,dataLength) + "..." : datum;
             } else if (harness.data === undefined) {
                 datum = "N/A";
+                harness.missingData = true;
             } else {
                 datum = harness.data;
             }
@@ -53,6 +67,7 @@
             if (harness.view === undefined) {
                 harness.view = {};
                 harness.view.path = "N/A";
+                harness.missingRoute = true;
             }
         });
         // express
@@ -100,8 +115,7 @@
         }
     };
     setPageRoute = function (harnessRule) {
-        var request = require('request'),
-            setRoute = function (arg) {
+        var setRoute = function (arg) {
                 // express
                 app.get('/' + arg.route, function (req, res) {
                     res.render(arg.view, arg.data);
@@ -120,14 +134,13 @@
                 out.view = harness.view && harness.view.path;
                 setRoute(out);
             } else if (typeof harness.data === "string") {
-                request(harness.data, {"json": true}, function (error, response, body) {
-                    if (error || response.statusCode !== 200) {
-                        throw new ReferenceError("Service call failed with HTTP status code " + response.statusCode + " due to error:" + error);
-                    } else {
-                        out.view = harness.view && harness.view.path;
-                        out.data = body;
-                        setRoute(out);
+                getJsonViaString(harness.data, function (err, result) {
+                    if (err) {
+                        throw err;
                     }
+                    out.view = harness.view && harness.view.path;
+                    out.data = result;
+                    setRoute(out);
                 });
             } else if (typeof harness.data === "function") {
                 harness.data(function (result) {
@@ -144,6 +157,42 @@
             }
         });
     };
+    setJsonRoute = function (harnessRule) {
+        var data = {"tuxharness": "error"},
+            routeFound = false,
+            query,
+            url = require('url'),
+            urnParts;
+        // express
+        app.get('/json', function (req, res) {
+            urnParts = url.parse(req.url, true);
+            query = urnParts.query;
+
+            harnessRule.forEach(function (harness) {
+                if (query && query.route && (harness.route === query.route)) {
+                    routeFound = true;
+                    if (typeof harness.data === "string") {
+                        getJsonViaString(harness.data, function (err, result) {
+                            if (err) {
+                                res.status(500).json({"error": err});
+                            }
+                            res.json(result);
+                        });
+                    } else if (typeof harness.data === "function") {
+                        harness.data(function (result) {
+                            res.json(result);
+                        });
+                    } else {
+                        data = harness.data || {"Route is missing data": "N/A"};
+                        res.json(data);
+                    }
+                }
+            });
+            if (routeFound === false) {
+                res.status(500).json({"error": "Route not found; Query string required `route`"});
+            }
+        });
+    };
 
     if (recipe.register && recipe.register.view) {
         setViewEngine(recipe.register.view);
@@ -153,6 +202,7 @@
     }
     setHomeRoute(recipe);
     setPageRoute(recipe.harnesses);
+    setJsonRoute(recipe.harnesses);
 
     // start server
     server = app.listen(serverPort, function () {
