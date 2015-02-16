@@ -63,6 +63,7 @@
                 datum = harness.data;
             }
             harness.datum = datum;
+            harness.routeStem = harness.route.split(/[\?\#]/)[0];
 
             if (harness.view === undefined) {
                 harness.view = {};
@@ -116,8 +117,9 @@
     };
     setPageRoute = function (harnessRule) {
         var setRoute = function (arg) {
+                var stem = arg.route.split(/[\?\#]/)[0];
                 // express
-                app.get('/' + arg.route, function (req, res) {
+                app.get('/' + stem, function (req, res) {
                     res.render(arg.view, arg.data);
                 });
             };
@@ -159,6 +161,7 @@
     };
     setJsonRoute = function (harnessRule) {
         var data = {"tuxharness": "error"},
+            errors = [],
             routeFound = false,
             query,
             url = require('url'),
@@ -169,7 +172,7 @@
             query = urnParts.query;
 
             harnessRule.forEach(function (harness) {
-                if (query && query.route && (harness.route === query.route)) {
+                if (query && query.route && (harness.routeStem === query.route)) {
                     routeFound = true;
                     if (typeof harness.data === "string") {
                         getJsonViaString(harness.data, function (err, result) {
@@ -186,10 +189,12 @@
                         data = harness.data || {"Route is missing data": "N/A"};
                         res.json(data);
                     }
+                } else {
+                    errors.push("Route not found; Query string doesn't match `" + harness.routeStem + "`");
                 }
             });
             if (routeFound === false) {
-                res.status(500).json({"error": "Route not found; Query string required `route`"});
+                res.status(500).json({"error": "Route not found; Query string required `route`; " + errors.join("; ")});
             }
         });
     };

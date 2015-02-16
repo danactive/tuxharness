@@ -1,3 +1,10 @@
+var streetAddress = {
+        "address": {
+            "street": "123 Main St",
+            "city": "Vancouver",
+            "province": "BC"
+        }
+    };
 module.exports = {
     "register": {
         "port": 3000,
@@ -23,12 +30,7 @@ module.exports = {
         },
         {
             "route": "helloDust",
-            "data": {
-                "address": {
-                    "street": "123 Main St",
-                    "city": "Vancouver"
-                }
-            },
+            "data": streetAddress,
             "view": {
                 "path": "hello.dust"
             }
@@ -76,6 +78,20 @@ module.exports = {
         {
             "route": "rawLargeJson",
             "data": require(__dirname + "/data/canadian-sales-tax.json")
+        },
+        {
+            "route": "routeQuery?city=Vancouver",
+            "view": {
+                "path": "html.dust"
+            },
+            "data": streetAddress
+        },
+        {
+            "route": "routeHash#anchor",
+            "view": {
+                "path": "html.dust"
+            },
+            "data": streetAddress
         }
     ]
 };

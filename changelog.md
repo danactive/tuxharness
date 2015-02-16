@@ -1,4 +1,9 @@
 #Changelog
+## v1.1.1 2015-Feb-15
+* Home
+	* Use route stem
+* Route supports query string and hash
+
 ## v1.1.0 2015-Feb-10
 * Home
 	* Examine JSON
