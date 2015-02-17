@@ -1,4 +1,8 @@
 #Changelog
+## v1.3.1 2015-Feb-17
+* Package
+	* Update consolidate.js to v0.11
+
 ## v1.3.0 2015-Feb-17
 * Data
 	* JSON route changed from json?route=route to route/json

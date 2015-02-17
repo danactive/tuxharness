@@ -130,8 +130,7 @@
         });
     };
     setJsonRoute = function (harnessRule) {
-        var data = {"tuxharness": "error"},
-            errors = [];
+        var data = {"tuxharness": "error"};
         
         harnessRule.forEach(function (harness) {
             // express

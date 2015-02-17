@@ -1,18 +1,24 @@
 /*global $, window */
-function getParameterByName(name) {
+var city,
+	getParameterByName,
+	loc = window.document.location,
+	printMsg = function (msg) {
+		window.alert(msg);
+	};
+getParameterByName = function (name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
+        results = regex.exec(loc.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
+};
+city = getParameterByName('city');
 
 $("h1").click(function () {
-	window.alert("Ouch");
+	printMsg("Ouch");
 });
-var city = getParameterByName('city');
 if (city) {
-	window.alert("City query string is " + city + ".");
+	printMsg("City query string is " + city + ".");
 }
-if (location.hash) {
-	window.alert(location.hash);
+if (loc.hash) {
+	printMsg(loc.hash);
 }
