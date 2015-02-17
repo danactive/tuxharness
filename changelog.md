@@ -1,4 +1,8 @@
 #Changelog
+## v1.3.0 2015-Feb-17
+* Data
+	* JSON route changed from json?route=route to route/json
+
 ## v1.2.0 2015-Feb-17
 * Static
 	* Route and directory allow more flexibility

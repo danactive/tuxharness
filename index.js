@@ -64,6 +64,7 @@
             }
             harness.datum = datum;
             harness.routeStem = harness.route.split(/[\?\#]/)[0];
+            harness.routeJson = harness.routeStem + "/json";
 
             if (harness.view === undefined) {
                 harness.view = {};
@@ -130,41 +131,27 @@
     };
     setJsonRoute = function (harnessRule) {
         var data = {"tuxharness": "error"},
-            errors = [],
-            routeFound = false,
-            query,
-            url = require('url'),
-            urnParts;
-        // express
-        app.get('/json', function (req, res) {
-            urnParts = url.parse(req.url, true);
-            query = urnParts.query;
-
-            harnessRule.forEach(function (harness) {
-                if (query && query.route && (harness.routeStem === query.route)) {
-                    routeFound = true;
-                    if (typeof harness.data === "string") {
-                        getJsonViaString(harness.data, function (err, result) {
-                            if (err) {
-                                res.status(500).json({"error": err});
-                            }
-                            res.json(result);
-                        });
-                    } else if (typeof harness.data === "function") {
-                        harness.data(function (result) {
-                            res.json(result);
-                        });
-                    } else {
-                        data = harness.data || {"Route is missing data": "N/A"};
-                        res.json(data);
-                    }
+            errors = [];
+        
+        harnessRule.forEach(function (harness) {
+            // express
+            app.get("/" + harness.routeStem + "/json", function (req, res) {
+                if (typeof harness.data === "string") {
+                    getJsonViaString(harness.data, function (err, result) {
+                        if (err) {
+                            res.status(500).json({"error": err});
+                        }
+                        res.json(result);
+                    });
+                } else if (typeof harness.data === "function") {
+                    harness.data(function (result) {
+                        res.json(result);
+                    });
                 } else {
-                    errors.push("Route not found; Query string doesn't match `" + harness.routeStem + "`");
+                    data = harness.data || {"Route is missing data": "N/A"};
+                    res.json(data);
                 }
             });
-            if (routeFound === false) {
-                res.status(500).json({"error": "Route not found; Query string required `route`; " + errors.join("; ")});
-            }
         });
     };
 

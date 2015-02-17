@@ -8,7 +8,7 @@
         <ul>
             <li>Route {#missingRoute}{route}{:else}<a href="{route}">{route}{/missingRoute}</a></li>
             <li>View {view.path}</li>
-            <li>Data {datum} {#missingData}{:else}<a href="/json?route={routeStem}">Examine JSON</a>{/missingData}</li>
+            <li>Data {datum} {#missingData}{:else}<a href="{routeJson}">Examine JSON</a>{/missingData}</li>
         </ul>
     {/harnesses}
     {?register.static}
