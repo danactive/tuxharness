@@ -40,3 +40,7 @@ Every project needs a tuxharness JavaScript config like this [sample.js](test/sa
 * `npm run harness` Single run server to serve the test harness environment
 * `npm run dev` Respawn-on-save server to serve the test harness environment
 * `npm run lint` Lint JS files
+
+## Roadmap
+1. Allow remote recipes
+	* Views and data too

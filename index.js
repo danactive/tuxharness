@@ -8,7 +8,6 @@
         path = require("path"),
         pkg,
         recipe,
-        recipeFilename,
         setHomeRoute,
         setJsonRoute,
         setPageRoute,
@@ -18,11 +17,13 @@
         serverPort;
     app = express();
     pkg = require(path.join(appRoot.path, 'package.json'));
-    recipeFilename = pkg.tuxharness;
-    if (recipeFilename === undefined) {
+    if (pkg === undefined) {
+        throw new ReferenceError("Missing package.json in your project root.");
+    }
+    if (pkg.tuxharness === undefined) {
         throw new ReferenceError("Missing recipe filename or incorrect path. Definition must be package.json tuxharness key.");
     }
-    recipe = require(path.join(appRoot.path, recipeFilename));
+    recipe = require(path.join(appRoot.path, pkg.tuxharness));
     serverPort = recipe.register.port || 4000;
 
     getJsonViaString = function (url, cb) {
@@ -35,7 +36,6 @@
             }
         });
     };
-
     setViewEngine = function (viewRule) {
         var template = require('consolidate'),
             viewPaths = [];
@@ -77,43 +77,12 @@
         });
     };
     setStaticRoute = function (staticRule) {
-        var directory = staticRule.directory,
-            fs,
-            listDirectory = require('serve-index'),
-            routeNames = [],
-            routePaths = [],
+        var listDirectory = require('serve-index'),
             staticPath;
-        staticPath = path.join(appRoot.path, directory);
-        if (staticRule.route === "/") {
-            fs = require('fs');
+        staticPath = path.join(appRoot.path, staticRule.directory);
 
-            fs.exists(staticPath, function (exists) {
-                if (!exists) {
-                    throw new ReferenceError("Static path cannot be found: " + staticPath);
-                }
-                fs.readdir(staticPath, function (err, filenames) {
-                    var hasError = (err || filenames === undefined || filenames.length === 0);
-                    if (hasError) {
-                        throw new ReferenceError("Static path cannot be read: " + staticPath);
-                    }
-                    filenames.forEach(function (filename) {
-                        routeNames.push(filename);
-                        routePaths.push(path.join(appRoot.path, directory, filename));
-                    });
-                });
-            });
-        } else {
-            directory = path.join(staticRule.directory, "/", staticRule.route);
-            routeNames = [staticRule.route];
-            routePaths = [path.join(appRoot.path, directory)];
-        }
-        recipe.register.static.directory = directory;
-        recipe.register.static.route = routeNames;
-        // express
-        app.use(express.static(staticPath));
-        for (var i = 0, len = routeNames.length; i < len; i++) {
-            app.use('/' + routeNames[i], listDirectory(routePaths[i], {'icons': true})); // serve directory listing
-        }
+        app.use('/' + staticRule.route, express.static(staticPath)); // view document
+        app.use('/' + staticRule.route, listDirectory(staticPath, {'icons': true})); // serve directory listing
     };
     setPageRoute = function (harnessRule) {
         var setRoute = function (arg) {

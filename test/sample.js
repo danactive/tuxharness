@@ -10,7 +10,7 @@ module.exports = {
         "port": 3000,
         "static": {
             "route": "static",
-            "directory": "test"
+            "directory": "test/static"
         },
         "view": {
             "dust": {

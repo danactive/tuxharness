@@ -1,4 +1,8 @@
 #Changelog
+## v1.2.0 2015-Feb-17
+* Static
+	* Route and directory allow more flexibility
+
 ## v1.1.1 2015-Feb-15
 * Home
 	* Use route stem
