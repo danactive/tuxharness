@@ -1,5 +1,5 @@
 # Test User eXperience Harness
-Build a test harness with dynamic data to quickly prototype and isolate your HTML/CSS.
+Build a stand-alone test harness with dynamic data to quickly prototype and isolate your HTML/CSS or examine your JSON document.
 
 [![npm version](https://badge.fury.io/js/tuxharness.svg)](http://badge.fury.io/js/tuxharness)
 [![Dependencies Status](https://david-dm.org/danactive/tuxharness.svg)](https://david-dm.org/danactive/tuxharness)
@@ -12,6 +12,11 @@ Every project needs a tuxharness JavaScript config like this [sample.js](test/sa
 ### package.json
 * Your project's package.json is required to define the tuxharness' config like `"tuxharness": "./test/sample.js"` as documentent [package.json](package.json)
 
+### Start the harness
+* `node ./node_modules/tuxharness/index.js`
+* recommended to add a script reference to your package.json like `"harness": "node ./node_modules/tuxharness/index.js"` then execute with `npm run harness`
+
+## Recipe config structure
 ### Register
 * `port` localhost server port number (default is *4000*)
 * `static` serve static assets (img, js, css, fonts...)
@@ -44,3 +49,5 @@ Every project needs a tuxharness JavaScript config like this [sample.js](test/sa
 ## Roadmap
 1. Allow remote recipes
 	* Views and data too
+1. Host demo
+1. Unit tests

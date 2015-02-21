@@ -1,7 +1,17 @@
 #Changelog
+## v1.4.0 2015-Feb-22
+* Dependency
+	* Drop *request* as dependency, use built-in http module
+		* Reason: request footprint is 2.6Mb and currently fails on node.js v0.12
+* Home
+	* Drop dust view engine dependency for home page
+	* Redirect missing routes to home with error message
+* Debug
+	* Add new route for debugging recipe `tuxharness-debug-recipe`
+
 ## v1.3.1 2015-Feb-17
-* Package
-	* Update consolidate.js to v0.11
+* Dependency
+	* Update *consolidate.js* to v0.11
 
 ## v1.3.0 2015-Feb-17
 * Data
