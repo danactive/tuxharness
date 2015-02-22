@@ -1,0 +1,6 @@
+*.log
+node_modules
+test
+.jshintrc
+changelog.md
+gulpfile.js

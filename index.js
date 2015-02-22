@@ -70,7 +70,7 @@
             html.push("<h2>Your Routes</h2>");
             model.formattedHarnesses.forEach(function (harness) {
                 html.push("<ul>");
-                html.push("<li>Route ", (harness.home.missingRoute) ? harness.link : (' <a href="' + harness.link + '">' + harness.link + "</a>"), "</li>");
+                html.push("<li>Route ", (harness.home.disableRouteLink) ? harness.link : (' <a href="' + harness.link + '">' + harness.link + "</a>"), "</li>");
                 html.push("<li>View ", harness.home.view + "</li>");
                 html.push("<li>Data ", harness.home.datum, (harness.home.missingData) ? "" : (' <a href="' + harness.json.route + '">Examine JSON</a>'), "</li>");
                 html.push("</ul>");
@@ -150,13 +150,13 @@
                 harness.home.datum = datum;
 
                 if (harness.route === undefined) {
-                    harness.home.missingRoute = true;
+                    harness.home.disableRouteLink = true;
                     harness.home.missingData = true;
                 }
 
                 if (harness.view === undefined) {
                     harness.home.view = "N/A";
-                    harness.home.missingRoute = true;
+                    harness.home.disableRouteLink = true;
                 } else {
                     harness.home.view = harness.view;
                 }

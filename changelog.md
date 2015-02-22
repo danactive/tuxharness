@@ -1,4 +1,7 @@
 #Changelog
+## v1.4.3 2015-Feb-27
+* Using npm ignore to hide dev files
+
 ## v1.4.2 2015-Feb-24
 * Engine
 	* Verified on iojs v1.3.0
