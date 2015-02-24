@@ -1,4 +1,9 @@
 #Changelog
+## v1.4.1 2015-Feb-24
+* Dependency
+	* Update *express* to v4.12
+	* Update *gulp-develop-server* to v0.3
+
 ## v1.4.0 2015-Feb-22
 * Dependency
 	* Drop *request* as dependency, use built-in http module
