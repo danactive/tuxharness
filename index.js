@@ -52,7 +52,7 @@
         server = app.listen(serverPort, function () {
             var host = server.address().address,
                 port = server.address().port;
-            host = (host === "0.0.0.0") ? "localhost" : host;
+            host = (host === "0.0.0.0" || host === "::") ? "localhost" : host;
 
             console.log('tuxharness app running at http://%s:%s', host, port);
         });

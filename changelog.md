@@ -1,4 +1,8 @@
 #Changelog
+## v1.4.2 2015-Feb-24
+* Engine
+	* Verified on iojs v1.3.0
+
 ## v1.4.1 2015-Feb-24
 * Dependency
 	* Update *express* to v4.12
