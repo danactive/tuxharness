@@ -6,15 +6,18 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 [![DevDependencies Status](https://david-dm.org/danactive/tuxharness/dev-status.svg)](https://david-dm.org/danactive/tuxharness#info=devDependencies)
 [![MIT Licensed](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
-## Config structure as JavaScript
-Every project needs a tuxharness JavaScript config like this [sample.js](test/sample.js)
-
-### package.json
-* Your project's package.json is required to define the tuxharness' config like `"tuxharness": "./test/sample.js"` as documentent [package.json](package.json)
-
-### Start the harness
-* `node ./node_modules/tuxharness/index.js`
-* recommended to add a script reference to your package.json like `"harness": "node ./node_modules/tuxharness/index.js"` then execute with `npm run harness`
+## Installation steps to setup and configure
+1. `npm install tuxharness --save-dev`
+1. Create a **recipe** config JavaScript file (similar to *Gruntfile.js* or *gulpfile.js*)
+	* Any path or filename is allowed as defined in your project's *package.json*
+	* The object structure must match the [recipe config structure](#recipe-config-structure) defined below
+	* [Sample tuxharness recipe](test/sample.js)
+1. Link your **package.json** to the **recipe** JavaScript file
+	* Add a key to your project's *package.json* named `tuxharness` with a relative path value to your recipe
+	* Sample syntax `"tuxharness": "./test/sample.js"` as documented in [package.json](package.json)
+1. Run the harness
+	* `node ./node_modules/tuxharness/index.js`
+	* or add a *script* reference to your package.json like `"harness": "node ./node_modules/tuxharness/index.js"` then execute with `npm run harness`
 
 ## Recipe config structure
 ### Register
@@ -35,8 +38,8 @@ Every project needs a tuxharness JavaScript config like this [sample.js](test/sa
 * `data` (*function*) - callback argument will async call to gather data passed into the view for transformation
 
 ## Template View Engines
-1. dust.js (sample in test folder) 
-1. Jade (sample in test folder) 
+1. [dust.js](https://github.com/linkedin/dustjs) (sample in test folder) 
+1. [Jade](https://github.com/jadejs/jade) (sample in test folder) 
 1. Many others supported by [Consolidate.js](https://github.com/tj/consolidate.js)
 	1. install any additional engines in your project
 	1. register your view engine in your project's JS file
