@@ -49,6 +49,10 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 * `npm run dev` Respawn-on-save server to serve the test harness environment
 * `npm run lint` Lint JS files
 
+## JSON browser extentions
+* Firefox [JSONView](https://addons.mozilla.org/en-US/firefox/addon/jsonview/)
+* Chrome [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc)
+
 ## Roadmap
 1. Allow remote recipes
 	* Views and data too
