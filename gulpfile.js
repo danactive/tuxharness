@@ -2,7 +2,8 @@
 
 var gulp = require('gulp'),
 	paths = {
-		"lint": [".jshintrc", "package.json", "gulpfile.js", "index.js", "test/**/*.js"]
+		"lint": [".jshintrc", "package.json", "gulpfile.js", "index.js", "test/**/*.js"],
+		"test": ["test/unit_tests.js"]
 	},
 	pkg = require('./package.json'),
 	plugins = require('gulp-load-plugins')({"camelize": true});
@@ -51,4 +52,10 @@ gulp.task('develop', ["lint"], function() {
 	return gulp.watch(getViewFolders(), function () {
 		plugins.developServer.restart();
 	});
+});
+
+gulp.task('test', ['lint'], function() {
+	return gulp.src(paths.test)
+		.pipe(plugins.expectFile(paths.test))
+		.pipe(plugins.mocha({reporter: 'nyan'}));
 });

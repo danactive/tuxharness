@@ -7,8 +7,8 @@
     "harness": "node .",
     "dev": "./node_modules/.bin/gulp develop",
     "lint": "./node_modules/.bin/gulp lint",
-    "start": "node .",
-    "test": "npm run lint"
+    "start": "npm run harness",
+    "test": "./node_modules/.bin/gulp test"
   },
   "keywords": [
     "test",
@@ -47,11 +47,13 @@
   },
   "devDependencies": {
     "dustjs-linkedin": "2.5.x",
+    "expect.js": "0.3.x",
     "gulp": "3.8.x",
     "gulp-develop-server": "0.3.x",
     "gulp-expect-file": "0.0.x",
     "gulp-jshint": "1.9.x",
     "gulp-load-plugins": "0.8.x",
+    "gulp-mocha": "2.0.x",
     "jade": "1.9.x",
     "jshint-stylish": "1.0.x",
     "request": "2.53.x"
