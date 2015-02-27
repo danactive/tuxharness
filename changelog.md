@@ -1,5 +1,6 @@
 #Changelog
-## v1.4.3 2015-Feb-27
+## v1.5.0 2015-Feb-27
+* Support SSL for HTTPS requests
 * Using npm ignore to hide dev files
 
 ## v1.4.2 2015-Feb-24

@@ -73,6 +73,13 @@ module.exports = {
             }
         },
         {
+            "route": "facebookStringSSL",
+            "data": 'https://graph.facebook.com/github',
+            "view": {
+                "path": "api.dust"
+            }
+        },
+        {
             "route": "largeJson",
             "data": require(__dirname + "/data/canadian-sales-tax.json"),
             "view": {

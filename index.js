@@ -93,7 +93,9 @@
         return html.join("");
     }
     function getJsonViaString(url, cb) {
-        var httpRequest = require('http');
+        var httpRequest,
+            isSSL = (url.substring(0, 5) === "https");
+        httpRequest = (isSSL) ? require('https') : require('http');
         httpRequest.get(url, function(response) {
             var body = '';
 
