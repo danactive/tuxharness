@@ -1,1 +1,5 @@
-Hi I'm a partial at this address {address.street} {address.city}!
+{>"layout.dust"/}
+
+{<body}
+	Hi I'm a partial at this address {address.street} {address.city}!
+{/body}
