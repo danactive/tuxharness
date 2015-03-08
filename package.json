@@ -1,6 +1,6 @@
 {
   "name": "tuxharness",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Test User eXperience Harness",
   "main": "index.js",
   "scripts": {
@@ -46,10 +46,10 @@
     "serve-index": "1.6.x"
   },
   "devDependencies": {
-    "dustjs-linkedin": "2.5.x",
+    "dustjs-linkedin": "2.6.x",
     "expect.js": "0.3.x",
     "gulp": "3.8.x",
-    "gulp-develop-server": "0.3.x",
+    "gulp-develop-server": "0.4.x",
     "gulp-expect-file": "0.0.x",
     "gulp-jshint": "1.9.x",
     "gulp-load-plugins": "0.8.x",

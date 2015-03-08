@@ -1,4 +1,11 @@
 #Changelog
+## v1.5.1 2015-Mar-08
+* Dependency
+	* Update *dustjs-linkedin* to v2.6
+	* Update *gulp-develop-server* to v0.4
+* Bug
+	* [Bug #2](issues/2) added
+
 ## v1.5.0 2015-Feb-27
 * Support SSL for HTTPS requests
 * Using npm ignore to hide dev files
