@@ -1,4 +1,8 @@
 #Changelog
+## v1.5.2 2015-Mar-17
+* Dependency
+	* Update *serve-index* to v1.6.3 to avoid XSS security advisory
+
 ## v1.5.1 2015-Mar-08
 * Dependency
 	* Update *dustjs-linkedin* to v2.6
