@@ -6,10 +6,10 @@ var city,
 		window.alert(msg);
 	};
 getParameterByName = function (name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(loc.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		results = regex.exec(loc.search);
+	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 city = getParameterByName('city');
 
