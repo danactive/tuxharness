@@ -18,18 +18,22 @@
 
         // load files
         try {
-            pkg = require(packagePath);
+            recipe = require(path.join(appRoot.path, "tuxfile.js"));
         } catch (e) {
-            throw new ReferenceError("Missing package.json in your project root: " + packagePath);
-        }
-        if (pkg.tuxharness === undefined) {
-            throw new ReferenceError(missingRecipe);
-        }
-        recipePath = path.join(appRoot.path, pkg.tuxharness);
-        try {
-            recipe = require(recipePath);
-        } catch (e) {
-            throw new ReferenceError(missingRecipe + ": " + recipePath);
+            try {
+                pkg = require(packagePath);
+            } catch (e) {
+                throw new ReferenceError("Missing package.json in your project root: " + packagePath);
+            }
+            if (pkg.tuxharness === undefined) {
+                throw new ReferenceError(missingRecipe);
+            }
+            recipePath = path.join(appRoot.path, pkg.tuxharness);
+            try {
+                recipe = require(recipePath);
+            } catch (e) {
+                throw new ReferenceError(missingRecipe + ": " + recipePath);
+            }
         }
 
         serverPort = recipe.register && recipe.register.port || 4000;

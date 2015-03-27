@@ -1,4 +1,11 @@
 #Changelog
+## v1.6.0 2015-Mar-27
+* Setup
+	* tuxfile.js is default recipe filename
+* Dependency
+	* Update *gulp-load-plugins* to v0.9
+	* Update *request* to v2.54
+
 ## v1.5.2 2015-Mar-17
 * Dependency
 	* Update *serve-index* to v1.6.3 to avoid XSS security advisory

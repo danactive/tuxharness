@@ -54,9 +54,9 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 ## JSON browser extentions
 * Firefox [JSONView](https://addons.mozilla.org/en-US/firefox/addon/jsonview/)
 * Chrome [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc)
+* Safari [safari-json-formatter](https://github.com/rfletcher/safari-json-formatter)
 
 ## Roadmap
-1. Set tuxfile.js in project route as fallback
 1. Allow remote recipes
 	* Views and data too
 1. Host demo
