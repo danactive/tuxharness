@@ -1,6 +1,6 @@
 {
   "name": "tuxharness",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Test User eXperience Harness",
   "main": "index.js",
   "scripts": {

@@ -1,5 +1,5 @@
 #Changelog
-## v1.6.0 2015-Mar-27
+## v1.6.1 2015-Mar-27
 * Setup
 	* tuxfile.js is default recipe filename
 * Dependency

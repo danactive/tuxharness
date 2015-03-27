@@ -9,12 +9,13 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 ## Installation steps to setup and configure
 1. `npm install tuxharness --save-dev`
 1. Create a **recipe** config JavaScript file (similar to *Gruntfile.js* or *gulpfile.js*)
-	* Any path or filename is allowed as defined in your project's *package.json*
+	* `tuxfile.js` or custom
+		* Custom means any path or filename is allowed as defined in your project's *package.json*
+			* Link your **package.json** to the **recipe** JavaScript file
+				* Add a key to your project's *package.json* named `tuxharness` with a relative path value to your recipe
+				* Sample syntax `"tuxharness": "./test/sample.js"` as documented in [package.json](package.json)
 	* The object structure must match the [recipe config structure](#recipe-config-structure) defined below
-	* [Starter sample tuxharness recipe](test/starter.js), [full sample](test/sample.js)
-1. Link your **package.json** to the **recipe** JavaScript file
-	* Add a key to your project's *package.json* named `tuxharness` with a relative path value to your recipe
-	* Sample syntax `"tuxharness": "./test/sample.js"` as documented in [package.json](package.json)
+	* [Starter sample tuxharness recipe](test/starter.js) or [full sample](test/sample.js)
 1. Run the harness
 	* `node ./node_modules/tuxharness/index.js`
 	* or add a *script* reference to your package.json like `"harness": "node ./node_modules/tuxharness/index.js"` then execute with `npm run harness`
