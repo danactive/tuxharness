@@ -1,4 +1,8 @@
 #Changelog
+## v1.6.2 2015-Mar-28
+* Bug
+	* Fix when viewing a route without a view defined
+
 ## v1.6.1 2015-Mar-27
 * Setup
 	* tuxfile.js is default recipe filename
