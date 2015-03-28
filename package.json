@@ -1,6 +1,6 @@
 {
   "name": "tuxharness",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Test User eXperience Harness",
   "main": "index.js",
   "scripts": {
@@ -28,10 +28,14 @@
     "template",
     "prototype",
     "isolate",
+    "isolation",
     "view",
     "viewable",
     "engines",
-    "json"
+    "json",
+    "standalone",
+    "sandbox",
+    "server"
   ],
   "repository": {
     "type": "git",

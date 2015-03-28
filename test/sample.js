@@ -103,6 +103,12 @@ module.exports = {
 				"path": "html.dust"
 			},
 			"data": streetAddress
+		},
+		{
+			"route": "utilGetJsonRoute",
+			"data": function (cb, util) {
+				cb(util.getJsonRoute("largeJson"));
+			}
 		}
 	]
 };

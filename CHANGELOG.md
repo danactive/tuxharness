@@ -1,4 +1,8 @@
 #Changelog
+## v1.6.3 2015-Mar-28
+* Data
+	* Add util.getJsonRoute when data is a function
+
 ## v1.6.2 2015-Mar-28
 * Bug
 	* Fix when viewing a route without a view defined

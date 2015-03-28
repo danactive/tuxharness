@@ -4,7 +4,8 @@
 	var app,
 		appRoot = require('app-root-path'),
 		express = require('express'),
-		path = require("path");
+		path = require("path"),
+		server;
 
 	function init() {
 		var missingRecipe = "Missing recipe filename or incorrect path. Definition must be package.json tuxharness key",
@@ -12,7 +13,6 @@
 			pkg,
 			recipe,
 			recipePath,
-			server,
 			serverPort;
 		app = express();
 
@@ -218,6 +218,13 @@
 		});
 	}
 	function setExpressRoutes(harnesses) {
+		var util = {
+				"getJsonRoute": function (route) {
+					var host = server.address().address,
+						port = server.address().port;
+					return "http://" + host + ":" + port + "/" + route + "/json";
+				}
+			};
 		harnesses.forEach(function (harness) {
 			// HTML route
 			app.get(harness.route, function (req, res) {
@@ -238,7 +245,7 @@
 				} else if (harness.datumType === "function") {
 					harness.data(function (result) {
 						res.render(harness.view, result);
-					});
+					}, util);
 				} else if (harness.datumType === "object") {
 					res.render(harness.view, harness.data);
 				} else {
@@ -259,7 +266,7 @@
 				} else if (harness.json.datumType === "function") {
 					harness.json.data(function (result) {
 						res.json(result);
-					});
+					}, util);
 				} else {
 					res.json(harness.json.data);
 				}

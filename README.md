@@ -36,7 +36,10 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 	* `path` is the physical path where the view is hosted - relative to your view folder
 * `data` (*object*) - passed into the view for transformation
 * `data` (*string*) - service call to request JSON data
-* `data` (*function*) - callback argument will async call to gather data passed into the view for transformation
+* `data` (*function(**callback**, **util**)*) - callback argument will async call to gather data passed into the view for transformation
+	* *callback* type string/JSON: print to browser
+	* *util* type object
+		* *getJsonRoute* type function(string route): wraps route name with localhost IP address with port and JSON path
 
 ## Template View Engines
 1. [dust.js](https://github.com/linkedin/dustjs) (sample in test folder) 
