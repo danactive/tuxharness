@@ -219,9 +219,13 @@
 	}
 	function setExpressRoutes(harnesses) {
 		harnesses.forEach(function (harness) {
-			// page route
+			// HTML route
 			app.get(harness.route, function (req, res) {
-				if (harness.data === undefined) {
+				if (harness.data === undefined && harness.view === undefined) {
+					res.status(404).send({"error": "The tuxharness recipe for " + harness.route + " needs either a view or data defined."});
+				} else if (harness.view === undefined) {
+					res.redirect(harness.route + "/json");
+				} else if (harness.data === undefined) {
 					res.render(harness.view);
 				} else if (harness.datumType === "string") {
 					getJsonViaString(harness.data, function (err, result) {
