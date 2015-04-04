@@ -70,7 +70,7 @@
 			html.push('<p class="error">' + model.msg + '</p>');
 		}
 
-		if (model.harnesses) {
+		if (model.formattedHarnesses) {
 			html.push("<h2>Your Routes</h2>");
 			model.formattedHarnesses.forEach(function (harness) {
 				html.push("<ul>");
@@ -231,7 +231,7 @@
 				if (harness.data === undefined && harness.view === undefined) {
 					res.status(404).send({"error": "The tuxharness recipe for " + harness.route + " needs either a view or data defined."});
 				} else if (harness.view === undefined) {
-					res.redirect(harness.route + "/json");
+					res.redirect(harness.json.route);
 				} else if (harness.data === undefined) {
 					res.render(harness.view);
 				} else if (harness.datumType === "string") {
