@@ -6,6 +6,7 @@
   "scripts": {
     "harness": "node .",
     "dev": "./node_modules/.bin/gulp develop",
+    "local": "npm run dev",
     "lint": "./node_modules/.bin/gulp lint",
     "start": "npm run harness",
     "test": "./node_modules/.bin/gulp test"
@@ -60,6 +61,7 @@
     "gulp-mocha": "2.0.x",
     "jade": "1.9.x",
     "jshint-stylish": "1.0.x",
+    "node-notifier": "^4.1.2",
     "request": "2.54.x"
   },
   "engines": {

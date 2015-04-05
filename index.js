@@ -1,11 +1,61 @@
-/*global require*/
+/*global module, require*/
+var server,
+	getServerAddress = function () {
+		var host = server.address().address,
+			port = server.address().port;
+		return "http://" + ((host === "0.0.0.0" || host === "::") ? "localhost" : host) + ":" + port;
+	},
+	Harness = module.exports = function Harness(definition) {
+		definition = definition || {};
+		this.route = definition.route || null;
+		this.data = definition.data || null;
+		this.view = (definition.view && definition.view.path) ? definition.view.path : null;
+	};
+Harness.prototype.isHomeRouteLinkable = function () {
+	return !(this.route === null || this.view === null);
+};
+Harness.prototype.getHomeRoute = function () {
+	return (this.route === null) ? "N/A" : "/"+this.route;
+};
+Harness.prototype.getHomeView = function () {
+	return (this.view === null) ? "N/A" : this.view; 
+};
+Harness.prototype.isHomeDatumLinkable = function () {
+	return !(this.route === null || this.data === null);
+};
+Harness.prototype.getHomeDatum = function () {
+	var datum = null,
+		dataLength = 300;
+	switch (typeof this.data) {
+		case "string":
+			return this.data;
+		case "function":
+			return "Service call function";
+		default:
+			if (this.data === null) {
+				return "N/A";
+			}
+			datum = JSON.stringify(this.data);
+			return (datum.length > dataLength) ? datum.substring(0,dataLength) + "..." : datum;
+	}
+};
+Harness.prototype.getRoute = function () {
+	return (typeof this.route === "string") ? "/"+this.route.split(/[\?\#]/)[0] : null; // left of hash or query string
+};
+Harness.prototype.getJsonRoute = function () {
+	return (this.getRoute() === null) ? null : this.getRoute() + "/json";
+};
+Harness.prototype.getJsonDatum = function () {
+	return this.data || {"Route is missing data": "N/A"};
+};
+
 (function () {
 	'use strict';
 	var app,
 		appRoot = require('app-root-path'),
 		express = require('express'),
-		path = require("path"),
-		server;
+		harnesses = [],
+		path = require("path");
 
 	function init() {
 		var missingRecipe = "Missing recipe filename or incorrect path. Definition must be package.json tuxharness key",
@@ -38,7 +88,11 @@
 
 		serverPort = recipe.register && recipe.register.port || 4000;
 		if (recipe.harnesses) {
-			recipe.formattedHarnesses = formatHarnesses(recipe.harnesses);
+			harnesses = recipe.harnesses.map(function (harness) {
+				return new Harness(harness);
+			});
+
+			setExpressRoutes(harnesses);
 		}
 		if (recipe.register && recipe.register.view) {
 			setViewEngine(recipe.register.view);
@@ -46,19 +100,12 @@
 		if (recipe.register && recipe.register.static) {
 			setStaticRoute(recipe.register.static);
 		}
-		if (recipe.formattedHarnesses) {
-			setExpressRoutes(recipe.formattedHarnesses);
-		}
 		setHomeRoute(recipe);
 		setCatchAllRoute(recipe);
 
 		// start server
 		server = app.listen(serverPort, function () {
-			var host = server.address().address,
-				port = server.address().port;
-			host = (host === "0.0.0.0" || host === "::") ? "localhost" : host;
-
-			console.log('tuxharness app running at http://%s:%s', host, port);
+			console.log('tuxharness app running at %s', getServerAddress());
 		});
 	}
 	function getHomeHtml(model) {
@@ -67,18 +114,18 @@
 		html.push("<html><head><title>tuxharness - harness routes</title><style>.error{color: red;}</style></head><body>");
 
 		if (model.msg) {
-			html.push('<p class="error">' + model.msg + '</p>');
+			html.push('<p class="error">', model.msg, '</p>');
 		}
 
-		if (model.formattedHarnesses) {
+		if (harnesses.length > 0) {
 			html.push("<h2>Your Routes</h2>");
-			model.formattedHarnesses.forEach(function (harness) {
-				html.push("<ul>");
-				html.push("<li>Route ", (harness.home.disableRouteLink) ? harness.link : (' <a href="' + harness.link + '">' + harness.link + "</a>"), "</li>");
-				html.push("<li>View ", harness.home.view + "</li>");
-				html.push("<li>Data ", harness.home.datum, (harness.home.missingData) ? "" : (' <a href="' + harness.json.route + '">Examine JSON</a>'), "</li>");
-				html.push("</ul>");
-			});
+			Array.prototype.push.apply(html, harnesses.map(function (harness) {
+				var datum = harness.getHomeDatum(),
+					datumHtml = datum+" "+ ((harness.isHomeDatumLinkable()) ? '<a href="'+harness.getJsonRoute()+'">Examine JSON</a>' : ""),
+					route = harness.getHomeRoute(),
+					routeHtml = (harness.isHomeRouteLinkable()) ? '<a href="'+route+'">'+route+'</a>' : route;
+				return "<ul><li>Route "+routeHtml+"</li><li>View "+harness.getHomeView()+"</li><li>Data "+datumHtml+"</li></ul>";
+			}));
 		} else {
 			html.push('<p class="error">Missing your harness routes.</p>');
 		}
@@ -89,7 +136,7 @@
 			html.push('<li><a href="', model.register.static.route, '">', model.register.static.route, '</a> points to ', model.register.static.directory, '</li>');
 			html.push("</ul>");
 		}
-		html.push("<h2>Debug</h2>");
+		html.push("<h2>Recipe</h2>");
 		html.push("<ul>");
 		html.push('<li><a href="/tuxharness-debug-recipe">/tuxharness-debug-recipe</a></li>');
 		html.push("</ul>");
@@ -137,37 +184,6 @@
 		app.set('views', viewPaths);
 	}
 	function setHomeRoute(_recipe) {
-		var dataLength = 300;
-		if (_recipe.formattedHarnesses) {
-			_recipe.formattedHarnesses.forEach(function (harness) {
-				var datum;
-				harness.home = {};
-				if (harness.datumType === "function") {
-					datum = "Service call function";
-				} else if (harness.datumType === "object") {
-					datum = JSON.stringify(harness.data);
-					datum = (datum.length > dataLength) ? datum.substring(0,dataLength) + "..." : datum;
-				} else if (harness.data === undefined) {
-					datum = "N/A";
-					harness.home.missingData = true;
-				} else {
-					datum = harness.data;
-				}
-				harness.home.datum = datum;
-
-				if (harness.route === undefined) {
-					harness.home.disableRouteLink = true;
-					harness.home.missingData = true;
-				}
-
-				if (harness.view === undefined) {
-					harness.home.view = "N/A";
-					harness.home.disableRouteLink = true;
-				} else {
-					harness.home.view = harness.view;
-				}
-			});
-		}
 		// express
 		app.get('/', function (req, res) {
 			if (req.query && req.query.msg) {
@@ -184,28 +200,6 @@
 		app.use('/' + staticRule.route, express.static(staticPath)); // view document
 		app.use('/' + staticRule.route, listDirectory(staticPath, {'icons': true})); // serve directory listing
 	}
-	function formatHarnesses(harnesses) {
-		return harnesses.map(function (harness) {
-			var out = {};
-			if (harness.route === undefined) {
-				return;
-			}
-			out.stem = harness.route.split(/[\?\#]/)[0]; // left of hash or query string
-			out.route = "/" + out.stem;
-			out.link = "/" + harness.route;
-			out.data = harness.data;
-			out.datumType = typeof harness.data;
-			out.view = harness.view && harness.view.path;
-
-			out.json = {
-				"data": harness.data || {"Route is missing data": "N/A"}
-			};
-			out.json.datumType = typeof out.json.data;
-			out.json.route = out.route + "/json";
-
-			return out;
-		});
-	}
 	function setCatchAllRoute(_recipe) {
 		// express
 		app.use("/tuxharness-debug-recipe", function(req, res) {
@@ -220,55 +214,63 @@
 	function setExpressRoutes(harnesses) {
 		var util = {
 				"getJsonRoute": function (route) {
-					var host = server.address().address,
-						port = server.address().port;
-					return "http://" + host + ":" + port + "/" + route + "/json";
+					return getServerAddress() + "/" + route + "/json";
 				}
 			};
 		harnesses.forEach(function (harness) {
 			// HTML route
-			app.get(harness.route, function (req, res) {
-				if (harness.data === undefined && harness.view === undefined) {
+			app.get(harness.getRoute(), function (req, res) {
+				if (harness.data === null && harness.view === null) {
 					res.status(404).send({"error": "The tuxharness recipe for " + harness.route + " needs either a view or data defined."});
-				} else if (harness.view === undefined) {
+				} else if (harness.view === null) {
 					res.redirect(harness.json.route);
-				} else if (harness.data === undefined) {
+				} else if (harness.data === null) {
 					res.render(harness.view);
-				} else if (harness.datumType === "string") {
-					getJsonViaString(harness.data, function (err, result) {
-						if (err) {
-							res.status(500).send({"error": err});
-						} else {
-							res.render(harness.view, result);
-						}
-					});
-				} else if (harness.datumType === "function") {
-					harness.data(function (result) {
-						res.render(harness.view, result);
-					}, util);
-				} else if (harness.datumType === "object") {
-					res.render(harness.view, harness.data);
 				} else {
-					res.status(500).send({"error": "View template data is an odd format"});
+					switch (typeof harness.data) {
+						case "string":
+							getJsonViaString(harness.data, function (err, result) {
+								if (err) {
+									res.status(500).send({"error": err});
+								} else {
+									res.render(harness.view, result);
+								}
+							});
+							break;
+						case "function":
+							harness.data(function (result) {
+								res.render(harness.view, result);
+							}, util);
+							break;
+						case "object":
+							res.render(harness.view, harness.data);
+							break;
+						default:
+							res.status(500).send({"error": "View template data is an odd format"});
+							break;
+					}
 				}
 			});
-
 			// json route
-			app.get(harness.json.route, function (req, res) {
-				if (harness.json.datumType === "string") {
-					getJsonViaString(harness.json.data, function (err, result) {
-						if (err) {
-							res.status(500).json({"error": err});
-						} else {
+			app.get(harness.getJsonRoute(), function (req, res) {
+				switch (typeof harness.getJsonDatum()) {
+					case "string":
+						getJsonViaString(harness.getJsonDatum(), function (err, result) {
+							if (err) {
+								res.status(500).json({"error": err});
+							} else {
+								res.json(result);
+							}
+						});
+						break;
+					case "function":
+						harness.getJsonDatum()(function (result) {
 							res.json(result);
-						}
-					});
-				} else if (harness.json.datumType === "function") {
-					harness.json.data(function (result) {
-						res.json(result);
-					}, util);
-				} else {
-					res.json(harness.json.data);
+						}, util);
+						break;
+					default:
+						res.json(harness.getJsonDatum());
+						break;
 				}
 			});
 		});

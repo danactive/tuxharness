@@ -1,6 +1,7 @@
 /*global Object */
 
 var gulp = require('gulp'),
+	notifier = require('node-notifier'),
 	paths = {
 		"lint": [".jshintrc", "package.json", "gulpfile.js", "index.js", "test/**/*.js"],
 		"test": ["test/unit_tests.js"]
@@ -46,11 +47,19 @@ gulp.task('develop', ["lint"], function() {
 	gulp.watch(paths.lint, function () {
 		gulp.start("lint", function () {
 			plugins.developServer.restart();
+			notifier.notify({
+				'title': 'tuxharness server',
+				'message': 'Restarted'
+			});
 		});
 	});
 
 	return gulp.watch(getViewFolders(), function () {
 		plugins.developServer.restart();
+		notifier.notify({
+			'title': 'tuxharness server',
+			'message': 'Restarted'
+		});
 	});
 });
 
