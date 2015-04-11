@@ -9,7 +9,8 @@
     "local": "npm run dev",
     "lint": "./node_modules/.bin/gulp lint",
     "start": "npm run harness",
-    "test": "./node_modules/.bin/gulp test"
+    "test": "./node_modules/.bin/gulp testcoverage",
+    "testonly": "./node_modules/.bin/gulp test"
   },
   "keywords": [
     "test",
@@ -56,6 +57,7 @@
     "gulp": "3.8.x",
     "gulp-develop-server": "0.4.x",
     "gulp-expect-file": "0.0.x",
+    "gulp-istanbul": "^0.8.1",
     "gulp-jshint": "1.9.x",
     "gulp-load-plugins": "0.9.x",
     "gulp-mocha": "2.0.x",

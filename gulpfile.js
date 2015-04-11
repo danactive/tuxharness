@@ -68,3 +68,20 @@ gulp.task('test', ['lint'], function() {
 		.pipe(plugins.expectFile(paths.test))
 		.pipe(plugins.mocha({reporter: 'nyan'}));
 });
+
+gulp.task('testcoverage', ['lint'], function(cb) {
+	gulp.src(pkg.main)
+		.pipe(plugins.expectFile(pkg.main))
+		.pipe(plugins.istanbul()) // Covering files
+		.pipe(plugins.istanbul.hookRequire()) // Force `require` to return covered files
+		.on('finish', function () {
+			gulp.src(paths.test)
+				.pipe(plugins.expectFile(paths.test))
+				.pipe(plugins.mocha({reporter: 'nyan'}))
+				.pipe(plugins.istanbul.writeReports({
+					dir: './temp/coverage',
+					reportOpts: { dir: './temp/coverage' }
+				})) // Creating the reports after tests runned
+				.on('end', cb);
+		});
+});
