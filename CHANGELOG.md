@@ -1,4 +1,13 @@
 #Changelog
+## v1.7.0 2015-Apr-11
+* Refactor
+	* Use prototype rather than formatted JSON
+	* Add 50% unit test coverage
+* Dependency
+	* Update *consolidate*
+	* Update *gulp-jshint*
+	* Update *gulp-load-plugins*
+
 ## v1.6.3 2015-Mar-28
 * Data
 	* Add util.getJsonRoute when data is a function
