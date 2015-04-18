@@ -8,19 +8,14 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 
 ## Installation steps to setup and configure
 1. `npm install tuxharness --save-dev`
-1. Create a **recipe** config JavaScript file (similar to *Gruntfile.js* or *gulpfile.js*)
-	* `tuxfile.js` or custom
-		* Custom means any path or filename is allowed as defined in your project's *package.json*
-			* Link your **package.json** to the **recipe** JavaScript file
-				* Add a key to your project's *package.json* named `tuxharness` with a relative path value to your recipe
-				* Sample syntax `"tuxharness": "./test/sample.js"` as documented in [package.json](package.json)
-	* The object structure must match the [recipe config structure](#recipe-config-structure) defined below
-	* [Starter sample tuxharness recipe](test/starter.js) or [full sample](test/sample.js)
-1. Run the harness
+1. Define a **recipe** file -- similar to *Gruntfile.js* or *gulpfile.js*
+	* Mac/Unix copy file `cp -nv "node_modules/tuxharness/tuxfile.js" "tuxfile.js"`
+	* Windows copy file `copy "node_modules/tuxharness/tuxfile.js" "tuxfile.js"`
+1. Run the harness server
 	* `node ./node_modules/tuxharness/index.js`
 	* or add a *script* reference to your package.json like `"harness": "node ./node_modules/tuxharness/index.js"` then execute with `npm run harness`
 
-## Recipe config structure
+## Recipe details
 ### Register
 * `port` localhost server port number (default is *4000*)
 * `static` serve static assets (img, js, css, fonts...)
@@ -40,6 +35,15 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 	* *callback* type string/JSON: print to browser
 	* *util* type object
 		* *getJsonRoute* type function(string route): wraps route name with localhost IP address with port and JSON path
+
+### tuxfile.js alternatives
+	* `tuxfile.js` or custom
+		* Custom means any path or filename is allowed as defined in your project's *package.json*
+			* Link your **package.json** to the **recipe** JavaScript file
+				* Add a key to your project's *package.json* named `tuxharness` with a relative path value to your recipe
+				* Sample syntax `"tuxharness": "./test/sample.js"` as documented in [package.json](package.json)
+	* The object structure must match the [recipe config structure](#recipe-config-structure) defined above
+	* [Starter sample tuxharness recipe](test/starter.js) or [full sample](test/sample.js)
 
 ## Template View Engines
 1. [dust.js](https://github.com/linkedin/dustjs) (sample in test folder) 

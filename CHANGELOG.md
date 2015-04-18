@@ -1,4 +1,8 @@
 #Changelog
+## v1.7.1 2015-Apr-18
+* Installation
+	* Easy tuxfile copy command
+
 ## v1.7.0 2015-Apr-11
 * Refactor
 	* Use prototype rather than formatted JSON
