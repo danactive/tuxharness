@@ -133,7 +133,7 @@ Harness.prototype.getJsonDatum = function () {
 		if (model.register && model.register.static) {
 			html.push("<h2>Static Route</h2>");
 			html.push("<ul>");
-			html.push('<li><a href="', model.register.static.route, '">', model.register.static.route, '</a> points to ', model.register.static.directory, '</li>');
+			html.push('<li><a href="', model.register.static.route, '">', model.register.static.route, '</a> route points to ', model.register.static.directory, ' file folder.</li>');
 			html.push("</ul>");
 		}
 		html.push("<h2>Recipe</h2>");
@@ -213,6 +213,25 @@ Harness.prototype.getJsonDatum = function () {
 	}
 	function setExpressRoutes(harnesses) {
 		var util = {
+				"getIpsumText": function (options) {
+					var defaultOptions = {
+							count: 5,                        // Number of words, sentences, or paragraphs to generate.
+							units: 'paragraphs',            // Generate words, sentences, or paragraphs.
+							sentenceLowerBound: 5,         // Minimum words per sentence.
+							sentenceUpperBound: 15,        // Maximum words per sentence.
+							paragraphLowerBound: 3,        // Minimum sentences per paragraph.
+							paragraphUpperBound: 7,        // Maximum sentences per paragraph.
+							format: 'html',
+							random: Math.random           // A PRNG function. Uses Math.random by default
+						},
+						extend = require("xtend"),
+						ipsum = require('lorem-ipsum'),
+						output;
+
+					options = extend(defaultOptions, options);
+					output = ipsum(options);
+					return output;
+				},
 				"getJsonRoute": function (route) {
 					return getServerAddress() + "/" + route + "/json";
 				}

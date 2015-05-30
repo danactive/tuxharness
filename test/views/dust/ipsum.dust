@@ -1,0 +1,5 @@
+{>"layout.dust"/}
+
+{<body}
+	{ipsum|s}
+{/body}

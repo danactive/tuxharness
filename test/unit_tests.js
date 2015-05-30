@@ -181,4 +181,17 @@ describe('Harness', function () {
 			"getJsonRoute": route
 		});
 	});
+	it('route: utilGetIpsum', function (done) {
+		var route = "ipsum";
+		testHarness({
+			"done": done,
+			"route": route,
+			"isHomeRouteLinkable": true,
+			"getHomeView": "ipsum.dust",
+			"isHomeDatumLinkable": true,
+			"getHomeDatum": "Service call function",
+			"getRoute": route,
+			"getJsonRoute": route
+		});
+	});
 });

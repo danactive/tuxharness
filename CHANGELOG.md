@@ -1,4 +1,8 @@
 #Changelog
+## v1.8.0 2015-May-30
+* Data
+	* Add Lorem Ipsum generator as util.getIpsumText
+
 ## v1.7.1 2015-Apr-18
 * Installation
 	* Easy tuxfile copy command

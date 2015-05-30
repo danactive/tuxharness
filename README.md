@@ -37,13 +37,13 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 		* *getJsonRoute* type function(string route): wraps route name with localhost IP address with port and JSON path
 
 ### tuxfile.js alternatives
-	* `tuxfile.js` or custom
-		* Custom means any path or filename is allowed as defined in your project's *package.json*
-			* Link your **package.json** to the **recipe** JavaScript file
-				* Add a key to your project's *package.json* named `tuxharness` with a relative path value to your recipe
-				* Sample syntax `"tuxharness": "./test/sample.js"` as documented in [package.json](package.json)
-	* The object structure must match the [recipe config structure](#recipe-config-structure) defined above
-	* [Starter sample tuxharness recipe](test/starter.js) or [full sample](test/sample.js)
+* `tuxfile.js` or custom
+	* Custom means any path or filename is allowed as defined in your project's *package.json*
+		* Link your **package.json** to the **recipe** JavaScript file
+			* Add a key to your project's *package.json* named `tuxharness` with a relative path value to your recipe
+			* Sample syntax `"tuxharness": "./test/sample.js"` as documented in [package.json](package.json)
+* The object structure must match the [recipe config structure](#recipe-config-structure) defined above
+* [Starter sample tuxharness recipe](test/starter.js) or [full sample](test/sample.js)
 
 ## Template View Engines
 1. [dust.js](https://github.com/linkedin/dustjs) (sample in test folder) 

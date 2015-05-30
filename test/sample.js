@@ -109,6 +109,15 @@ module.exports = {
 			"data": function (cb, util) {
 				cb(util.getJsonRoute("largeJson"));
 			}
+		},
+		{
+			"route": "ipsum",
+			"view": {
+				"path": "ipsum.dust"
+			},
+			"data": function (cb, util) {
+				cb({"ipsum": util.getIpsumText()});
+			}
 		}
 	]
 };
