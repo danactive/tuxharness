@@ -9,6 +9,10 @@
 	* Killed [bug #2](issues/2)
 * Data
 	* Add Lorem Ipsum generator as util.getIpsumText
+* Dependencies
+	* Update *consolidate* to v0.13
+	* Update *gulp-istanbul* to v0.9
+	* Update *jshint-stylish* to v2.0
 
 ## v1.7.1 2015-Apr-18
 * Installation
