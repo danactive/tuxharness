@@ -13,27 +13,19 @@ module.exports = {
 			"directory": "test/static"
 		},
 		"view": {
-			"dust": {
-				"path": "test/views/dust"
-			},
-			"jade": {
-				"path": "test/views/jade"
-			}
+			"engines": ["dust", "jade"],
+			"path": "test/views"
 		}
 	},
 	"harnesses": [
 		{
 			"route": "html",
-			"view": {
-				"path": "html.dust"
-			}
+			"view": "html.dust"
 		},
 		{
 			"route": "helloDust",
 			"data": streetAddress,
-			"view": {
-				"path": "hello.dust"
-			}
+			"view": "hello.dust"
 		},
 		{
 			"route": "helloJade",
@@ -41,9 +33,7 @@ module.exports = {
 				"title": "Jade title",
 				"message": "Jade view engine"
 			},
-			"view": {
-				"path": "hello.jade"
-			}
+			"view": "hello.jade"
 		},
 		{
 			"route": "facebookFunction",
@@ -61,30 +51,22 @@ module.exports = {
 					cb(e);
 				}
 			},
-			"view": {
-				"path": "api.dust"
-			}
+			"view": "api.dust"
 		},
 		{
 			"route": "facebookString",
 			"data": 'http://graph.facebook.com/github',
-			"view": {
-				"path": "api.dust"
-			}
+			"view": "api.dust"
 		},
 		{
 			"route": "facebookStringSSL",
 			"data": 'https://graph.facebook.com/github',
-			"view": {
-				"path": "api.dust"
-			}
+			"view": "api.dust"
 		},
 		{
 			"route": "largeJson",
 			"data": require(__dirname + "/data/canadian-sales-tax.json"),
-			"view": {
-				"path": "salesTax.jade"
-			}
+			"view": "salesTax.jade"
 		},
 		{
 			"route": "rawLargeJson",
@@ -92,16 +74,12 @@ module.exports = {
 		},
 		{
 			"route": "routeQuery?city=Vancouver",
-			"view": {
-				"path": "html.dust"
-			},
+			"view": "html.dust",
 			"data": streetAddress
 		},
 		{
 			"route": "routeHash#anchor",
-			"view": {
-				"path": "html.dust"
-			},
+			"view": "html.dust",
 			"data": streetAddress
 		},
 		{
@@ -112,9 +90,7 @@ module.exports = {
 		},
 		{
 			"route": "ipsum",
-			"view": {
-				"path": "ipsum.dust"
-			},
+			"view": "ipsum.dust",
 			"data": function (cb, util) {
 				cb({"ipsum": util.getIpsumText()});
 			}

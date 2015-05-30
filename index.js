@@ -5,11 +5,11 @@ var server,
 			port = server.address().port;
 		return "http://" + ((host === "0.0.0.0" || host === "::") ? "localhost" : host) + ":" + port;
 	},
-	Harness = module.exports = function Harness(definition) {
+	Harness = function Harness(definition) {
 		definition = definition || {};
 		this.route = definition.route || null;
 		this.data = definition.data || null;
-		this.view = (definition.view && definition.view.path) ? definition.view.path : null;
+		this.view = definition.view || null;
 	};
 Harness.prototype.isHomeRouteLinkable = function () {
 	return !(this.route === null || this.view === null);
@@ -58,11 +58,7 @@ Harness.prototype.getJsonDatum = function () {
 		path = require("path");
 
 	function init() {
-		var missingRecipe = "Missing recipe filename or incorrect path. Definition must be package.json tuxharness key",
-			packagePath = path.join(appRoot.path, 'package.json'),
-			pkg,
-			recipe,
-			recipePath,
+		var recipe,
 			serverPort;
 		app = express();
 
@@ -70,20 +66,7 @@ Harness.prototype.getJsonDatum = function () {
 		try {
 			recipe = require(path.join(appRoot.path, "tuxfile.js"));
 		} catch (e) {
-			try {
-				pkg = require(packagePath);
-			} catch (e) {
-				throw new ReferenceError("Missing package.json in your project root: " + packagePath);
-			}
-			if (pkg.tuxharness === undefined) {
-				throw new ReferenceError(missingRecipe);
-			}
-			recipePath = path.join(appRoot.path, pkg.tuxharness);
-			try {
-				recipe = require(recipePath);
-			} catch (e) {
-				throw new ReferenceError(missingRecipe + ": " + recipePath);
-			}
+			throw new ReferenceError("Missing tuxfile.js recipe.");
 		}
 
 		serverPort = recipe.register && recipe.register.port || 4000;
@@ -173,15 +156,13 @@ Harness.prototype.getJsonDatum = function () {
 		});
 	}
 	function setViewEngine(viewRule) {
-		var template = require('consolidate'),
-			viewPaths = [];
+		var template = require('consolidate');
 		// register view engines based on recipe to express
-		Object.keys(viewRule).forEach(function (key) {
+		viewRule.engines.forEach(function (key) {
 			app.engine(key, template[key]);
 			app.set('view engine', key);
-			viewPaths.push(viewRule[key].path);
 		});
-		app.set('views', viewPaths);
+		app.set('views', viewRule.path);
 	}
 	function setHomeRoute(_recipe) {
 		// express
@@ -297,3 +278,5 @@ Harness.prototype.getJsonDatum = function () {
 
 	init();
 })();
+
+module.exports = Harness;

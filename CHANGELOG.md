@@ -1,5 +1,12 @@
 #Changelog
-## v1.8.0 2015-May-30
+## v2.0.0 2015-May-30
+* Breaking change
+	* `tuxfile.js`
+		* Register view engine structure changed. For example `"view":{"engines":["dust","jade"],"path":"test/views"}`
+		* Set harness route view changed to `"view": "hello.dust"`
+	* Removed tuxharness property from `package.json`
+* Bug
+	* Killed [bug #2](issues/2)
 * Data
 	* Add Lorem Ipsum generator as util.getIpsumText
 
@@ -11,7 +18,7 @@
 * Refactor
 	* Use prototype rather than formatted JSON
 	* Add 50% unit test coverage
-* Dependency
+* Dependencies
 	* Update *consolidate*
 	* Update *gulp-jshint*
 	* Update *gulp-load-plugins*
@@ -27,7 +34,7 @@
 ## v1.6.1 2015-Mar-27
 * Setup
 	* tuxfile.js is default recipe filename
-* Dependency
+* Dependencies
 	* Update *gulp-load-plugins* to v0.9
 	* Update *request* to v2.54
 
@@ -36,7 +43,7 @@
 	* Update *serve-index* to v1.6.3 to avoid XSS security advisory
 
 ## v1.5.1 2015-Mar-08
-* Dependency
+* Dependencies
 	* Update *dustjs-linkedin* to v2.6
 	* Update *gulp-develop-server* to v0.4
 * Bug
@@ -51,7 +58,7 @@
 	* Verified on iojs v1.3.0
 
 ## v1.4.1 2015-Feb-24
-* Dependency
+* Dependencies
 	* Update *express* to v4.12
 	* Update *gulp-develop-server* to v0.3
 

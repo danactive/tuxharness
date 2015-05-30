@@ -5,9 +5,8 @@ module.exports = {
 			"directory": "public"
 		},
 		"view": {
-			"dust": {
-				"path": "views"
-			}
+			"engines": ["dust"],
+			"path": "views"
 		}
 	},
 	"harnesses": [
