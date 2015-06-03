@@ -1,6 +1,6 @@
 {
   "name": "tuxharness",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Test User eXperience Harness",
   "main": "index.js",
   "scripts": {
@@ -37,7 +37,9 @@
     "json",
     "standalone",
     "sandbox",
-    "server"
+    "server",
+    "lorem",
+    "ipsum"
   ],
   "repository": {
     "type": "git",
@@ -46,19 +48,19 @@
   "author": "Dan BROOKS",
   "license": "MIT",
   "dependencies": {
-    "app-root-path": "1.0.x",
+    "app-root-path": "^1.0.0",
     "consolidate": "^0.13.1",
-    "express": "4.12.x",
+    "express": "^4.12.0",
     "lorem-ipsum": "^1.0.3",
     "serve-index": "^1.6.3",
     "xtend": "^4.0.0"
   },
   "devDependencies": {
     "dustjs-linkedin": "^2.6.x",
-    "expect.js": "0.3.x",
-    "gulp": "3.8.x",
-    "gulp-develop-server": "0.4.x",
-    "gulp-expect-file": "0.0.x",
+    "expect.js": "^0.3.0",
+    "gulp": "^3.8.0",
+    "gulp-develop-server": "^0.4.0",
+    "gulp-expect-file": "^0.0.0",
     "gulp-istanbul": "^0.9.0",
     "gulp-jshint": "^1.9.0",
     "gulp-load-plugins": "^0.10.0",
@@ -71,6 +73,5 @@
   "engines": {
     "node": ">=0.10 <=0.12",
     "iojs": "1.x"
-  },
-  "tuxharness": "./test/sample.js"
+  }
 }

@@ -1,4 +1,8 @@
 #Changelog
+## v2.0.1 2015-Jun-02
+* Dependencies
+	* Update *gulp* to v3.9
+
 ## v2.0.0 2015-May-30
 * Breaking change
 	* `tuxfile.js`

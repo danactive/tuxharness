@@ -34,6 +34,7 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 * `data` (*function(**callback**, **util**)*) - callback argument will async call to gather data passed into the view for transformation
 	* *callback* type string/JSON: print to browser
 	* *util* type object
+		* *getIpsumText* Lorum Ipsum generator
 		* *getJsonRoute* type function(string route): wraps route name with localhost IP address with port and JSON path
 
 ## Template View Engines
