@@ -1,4 +1,9 @@
 #Changelog
+## v2.0.2 2015-Jun-19
+* Dependencies
+	* Update *gulp-expect-file* to v0.0.7
+	* Update *gulp-istanbul-file* to v0.10
+
 ## v2.0.1 2015-Jun-02
 * Dependencies
 	* Update *gulp* to v3.9
