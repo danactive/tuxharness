@@ -214,6 +214,9 @@ Harness.prototype.getJsonDatum = function () {
 					return output;
 				},
 				"getJsonRoute": function (route) {
+					if (route === undefined) {
+						throw ReferenceError("Missing route parameter");
+					}
 					return getServerAddress() + "/" + route + "/json";
 				}
 			};
