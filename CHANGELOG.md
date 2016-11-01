@@ -1,4 +1,8 @@
 #Changelog
+## v2.0.3 2016-Nov-01
+* Dependencies
+	* Add greenkeeper for dependency management
+
 ## v2.0.2 2015-Jun-19
 * Dependencies
 	* Update *gulp-expect-file* to v0.0.7

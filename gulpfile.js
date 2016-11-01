@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 	},
 	pkg = require('./package.json'),
 	plugins = require('gulp-load-plugins')({"camelize": true});
- 
+
 gulp.task('lint', function() {
 	return gulp.src(paths.lint)
 		.pipe(plugins.expectFile(paths.lint))
@@ -41,7 +41,7 @@ gulp.task('develop', ["lint"], function() {
 
 		return paths;
 	};
-	
+
 	plugins.developServer.listen({ "PORT": getConfigPort(), "path": pkg.main });
 
 	gulp.watch(paths.lint, function () {
@@ -63,7 +63,7 @@ gulp.task('develop', ["lint"], function() {
 	});
 });
 
-gulp.task('test', ['lint'], function() {
+gulp.task('test', function() {
 	return gulp.src(paths.test)
 		.pipe(plugins.expectFile(paths.test))
 		.pipe(plugins.mocha({reporter: 'nyan'}));

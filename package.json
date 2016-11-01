@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "harness": "node .",
-    "dev": "./node_modules/.bin/gulp develop",
+    "dev": "gulp develop",
     "local": "npm run dev",
-    "lint": "./node_modules/.bin/gulp lint",
+    "lint": "gulp lint",
     "start": "npm run harness",
-    "test": "./node_modules/.bin/gulp testcoverage",
-    "testonly": "./node_modules/.bin/gulp test"
+    "test": "gulp test",
+    "testcover": "gulp testcoverage"
   },
   "keywords": [
     "test",
@@ -70,8 +70,10 @@
     "node-notifier": "^4.1.2",
     "request": "^2.55.0"
   },
+  "peerDependencies": {
+    "jshint": "^2.9.4"
+  },
   "engines": {
-    "node": ">=0.10 <=0.12",
-    "iojs": "1.x"
+    "node": ">=0.10"
   }
 }
