@@ -1,4 +1,8 @@
 #Changelog
+## v2.0.4 2016-Nov-05
+* Engine
+	* Support all Node.js platform engines 
+	
 ## v2.0.3 2016-Nov-01
 * Dependencies
 	* Add greenkeeper for dependency management
