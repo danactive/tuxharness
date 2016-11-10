@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "dustjs-linkedin": "^2.6.x",
-    "expect.js": "^0.3.0",
+    "expect.js": "^0.3.1",
     "gulp": "^3.8.0",
     "gulp-develop-server": "^0.5.2",
     "gulp-expect-file": "^0.0.7",
