@@ -18,7 +18,7 @@ Harness.prototype.getHomeRoute = function () {
 	return (this.route === null) ? "N/A" : "/"+this.route;
 };
 Harness.prototype.getHomeView = function () {
-	return (this.view === null) ? "N/A" : this.view; 
+	return (this.view === null) ? "N/A" : this.view;
 };
 Harness.prototype.isHomeDatumLinkable = function () {
 	return !(this.route === null || this.data === null);
@@ -57,40 +57,16 @@ Harness.prototype.getJsonDatum = function () {
 		harnesses = [],
 		path = require("path");
 
-	function init() {
-		var recipe,
-			serverPort;
-		app = express();
-
-		// load files
-		try {
-			recipe = require(path.join(appRoot.path, "tuxfile.js"));
-		} catch (e) {
-			throw new ReferenceError("Missing tuxfile.js recipe.");
-		}
-
-		serverPort = recipe.register && recipe.register.port || 4000;
-		if (recipe.harnesses) {
-			harnesses = recipe.harnesses.map(function (harness) {
-				return new Harness(harness);
-			});
-
-			setExpressRoutes(harnesses);
-		}
-		if (recipe.register && recipe.register.view) {
-			setViewEngine(recipe.register.view);
-		}
-		if (recipe.register && recipe.register.static) {
-			setStaticRoute(recipe.register.static);
-		}
-		setHomeRoute(recipe);
-		setCatchAllRoute(recipe);
-
-		// start server
-		server = app.listen(serverPort, function () {
-			console.log('tuxharness app running at %s', getServerAddress());
+	function setViewEngine(viewRule) {
+		var template = require('consolidate');
+		// register view engines based on recipe to express
+		viewRule.engines.forEach(function (key) {
+			app.engine(key, template[key]);
+			app.set('view engine', key);
 		});
+		app.set('views', viewRule.path);
 	}
+
 	function getHomeHtml(model) {
 		var html = [];
 
@@ -126,6 +102,38 @@ Harness.prototype.getJsonDatum = function () {
 		html.push("</body></html>");
 		return html.join("");
 	}
+
+	function setHomeRoute(_recipe) {
+		// express
+		app.get('/', function (req, res) {
+			if (req.query && req.query.msg) {
+				_recipe.msg = req.query.msg;
+			}
+			res.send(getHomeHtml(_recipe));
+		});
+	}
+
+	function setStaticRoute(staticRule) {
+		var listDirectory = require('serve-index'),
+			staticPath;
+		staticPath = path.join(appRoot.path, staticRule.directory);
+
+		app.use('/' + staticRule.route, express.static(staticPath)); // view document
+		app.use('/' + staticRule.route, listDirectory(staticPath, {'icons': true})); // serve directory listing
+	}
+
+	function setCatchAllRoute(_recipe) {
+		// express
+		app.use("/tuxharness-debug-recipe", function(req, res) {
+			res.send(_recipe);
+		});
+
+		app.use("/*", function(req, res) {
+			var msg = "Route not defined: " + req.baseUrl;
+			res.redirect(302, "/?msg=" + encodeURIComponent(msg));
+		});
+	}
+
 	function getJsonViaString(url, cb) {
 		var httpRequest,
 			isSSL = (url.substring(0, 5) === "https");
@@ -155,71 +163,35 @@ Harness.prototype.getJsonDatum = function () {
 			cb(new URIError("Service call failed due to error:" + e.message));
 		});
 	}
-	function setViewEngine(viewRule) {
-		var template = require('consolidate');
-		// register view engines based on recipe to express
-		viewRule.engines.forEach(function (key) {
-			app.engine(key, template[key]);
-			app.set('view engine', key);
-		});
-		app.set('views', viewRule.path);
-	}
-	function setHomeRoute(_recipe) {
-		// express
-		app.get('/', function (req, res) {
-			if (req.query && req.query.msg) {
-				_recipe.msg = req.query.msg;
-			}
-			res.send(getHomeHtml(_recipe));
-		});
-	}
-	function setStaticRoute(staticRule) {
-		var listDirectory = require('serve-index'),
-			staticPath;
-		staticPath = path.join(appRoot.path, staticRule.directory);
 
-		app.use('/' + staticRule.route, express.static(staticPath)); // view document
-		app.use('/' + staticRule.route, listDirectory(staticPath, {'icons': true})); // serve directory listing
-	}
-	function setCatchAllRoute(_recipe) {
-		// express
-		app.use("/tuxharness-debug-recipe", function(req, res) {
-			res.send(_recipe);
-		});
-
-		app.use("/*", function(req, res) {
-			var msg = "Route not defined: " + req.baseUrl;
-			res.redirect(302, "/?msg=" + encodeURIComponent(msg));
-		});
-	}
 	function setExpressRoutes(harnesses) {
 		var util = {
-				"getIpsumText": function (options) {
-					var defaultOptions = {
-							count: 5,                        // Number of words, sentences, or paragraphs to generate.
-							units: 'paragraphs',            // Generate words, sentences, or paragraphs.
-							sentenceLowerBound: 5,         // Minimum words per sentence.
-							sentenceUpperBound: 15,        // Maximum words per sentence.
-							paragraphLowerBound: 3,        // Minimum sentences per paragraph.
-							paragraphUpperBound: 7,        // Maximum sentences per paragraph.
-							format: 'html',
-							random: Math.random           // A PRNG function. Uses Math.random by default
-						},
-						extend = require("xtend"),
-						ipsum = require('lorem-ipsum'),
-						output;
+			"getIpsumText": function (options) {
+				var defaultOptions = {
+						count: 5,                        // Number of words, sentences, or paragraphs to generate.
+						units: 'paragraphs',            // Generate words, sentences, or paragraphs.
+						sentenceLowerBound: 5,         // Minimum words per sentence.
+						sentenceUpperBound: 15,        // Maximum words per sentence.
+						paragraphLowerBound: 3,        // Minimum sentences per paragraph.
+						paragraphUpperBound: 7,        // Maximum sentences per paragraph.
+						format: 'html',
+						random: Math.random           // A PRNG function. Uses Math.random by default
+					},
+					extend = require("xtend"),
+					ipsum = require('lorem-ipsum'),
+					output;
 
-					options = extend(defaultOptions, options);
-					output = ipsum(options);
-					return output;
-				},
-				"getJsonRoute": function (route) {
-					if (route === undefined) {
-						throw ReferenceError("Missing route parameter");
-					}
-					return getServerAddress() + "/" + route + "/json";
+				options = extend(defaultOptions, options);
+				output = ipsum(options);
+				return output;
+			},
+			"getJsonRoute": function (route) {
+				if (route === undefined) {
+					throw new ReferenceError("Missing route parameter");
 				}
-			};
+				return getServerAddress() + "/" + route + "/json";
+			}
+		};
 		harnesses.forEach(function (harness) {
 			// HTML route
 			app.get(harness.getRoute(), function (req, res) {
@@ -276,6 +248,41 @@ Harness.prototype.getJsonDatum = function () {
 						break;
 				}
 			});
+		});
+	}
+
+	function init() {
+		var recipe,
+			serverPort;
+		app = express();
+
+		// load files
+		try {
+			recipe = require(path.join(appRoot.path, "tuxfile.js"));
+		} catch (e) {
+			throw new ReferenceError("Missing tuxfile.js recipe.");
+		}
+
+		serverPort = recipe.register && recipe.register.port || 4000;
+		if (recipe.harnesses) {
+			harnesses = recipe.harnesses.map(function (harness) {
+				return new Harness(harness);
+			});
+
+			setExpressRoutes(harnesses);
+		}
+		if (recipe.register && recipe.register.view) {
+			setViewEngine(recipe.register.view);
+		}
+		if (recipe.register && recipe.register.static) {
+			setStaticRoute(recipe.register.static);
+		}
+		setHomeRoute(recipe);
+		setCatchAllRoute(recipe);
+
+		// start server
+		server = app.listen(serverPort, function () {
+			console.log('tuxharness app running at %s', getServerAddress());
 		});
 	}
 
