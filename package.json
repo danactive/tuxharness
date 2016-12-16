@@ -1,6 +1,6 @@
 {
   "name": "tuxharness",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Test User eXperience Harness",
   "main": "index.js",
   "scripts": {
@@ -66,12 +66,10 @@
     "gulp-load-plugins": "^1.4.0",
     "gulp-mocha": "^3.0.1",
     "jade": "^1.9.0",
+    "jshint": "^2.9.4",
     "jshint-stylish": "^2.0.0",
     "node-notifier": "^4.1.2",
     "request": "^2.55.0"
-  },
-  "peerDependencies": {
-    "jshint": "^2.9.4"
   },
   "engines": {
     "node": ">=0.10"

@@ -1,4 +1,9 @@
 #Changelog
+## v2.0.5 2016-Dec-15
+* Lint
+	* Lint and tests pass
+	* Convert peerDependency to devDependency
+
 ## v2.0.4 2016-Nov-05
 * Engine
 	* Support all Node.js platform engines 
