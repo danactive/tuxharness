@@ -7,12 +7,13 @@ Build a stand-alone test harness with dynamic data to quickly prototype and isol
 [![MIT Licensed](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
 ## Installation steps to setup and configure
-1. `npm install tuxharness --save-dev`
-2. Define a **recipe** file -- similar to *Gruntfile.js* or *gulpfile.js*
+1. `npm init` in your project folder
+2. `npm install tuxharness --save-dev`
+3. Define a **recipe** file -- similar to *Gruntfile.js* or *gulpfile.js*
     * Mac/Unix copy file `cp -nv "node_modules/tuxharness/tuxfile.js" "tuxfile.js"`
     * Windows copy file `copy "node_modules/tuxharness/tuxfile.js" "tuxfile.js"`
     * More example recipes [starter sample tuxharness recipe](test/starter.js) or [full sample](test/sample.js)
-3. Run the harness server
+4. Run the harness server
     * `node ./node_modules/tuxharness/index.js`
     * or add a *script* reference to your package.json like `"harness": "node ./node_modules/tuxharness/index.js"` then execute with `npm run harness`
 
