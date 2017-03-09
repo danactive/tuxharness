@@ -69,7 +69,7 @@
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.0.0",
     "node-notifier": "^5.0.0",
-    "request": "^2.55.0"
+    "request": "^2.81.0"
   },
   "engines": {
     "node": ">=0.10"
