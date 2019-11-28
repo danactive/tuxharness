@@ -60,7 +60,7 @@
     "expect.js": "^0.3.0",
     "gulp": "^3.8.0",
     "gulp-develop-server": "^0.5.2",
-    "gulp-expect-file": "^0.0.7",
+    "gulp-expect-file": "^1.0.2",
     "gulp-istanbul": "^1.1.1",
     "gulp-jshint": "^2.0.2",
     "gulp-load-plugins": "^1.4.0",
